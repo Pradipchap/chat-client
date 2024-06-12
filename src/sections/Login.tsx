@@ -48,7 +48,7 @@ export default function Login() {
       <div className="max-w-[400px] 2xl:max-w-[800px] w-full border-gray-100 border p-5 shadow-lg !bg-transparent flex flex-col gap-2 2xl:gap-7">
         <p className="text-customBlue mb-1 text-5xl font-semibold">Login!</p>
         <p className="text-customInputText text-base font-normal">
-          Sign in to start your session.
+          {SERVER_BASE_URL}
         </p>
         <form
           onSubmit={loginHandler}
