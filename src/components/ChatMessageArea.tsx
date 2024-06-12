@@ -30,7 +30,7 @@ export default function ChatMessageArea() {
   useEffect(() => {
     function getChats() {
       //console.log("retrieving");
-      //console.log(secondaryChatter);
+      console.log(secondaryChatter);
       //console.log(wsClient);
       sendSocketMessage({
         sender: userID,
@@ -44,15 +44,14 @@ export default function ChatMessageArea() {
       isWsReady === true &&
       userID !== "" &&
       secondaryChatter !== "" &&
+      typeof secondaryChatter !== "undefined" &&
       wsClient instanceof WebSocket
     )
       getChats();
   }, [userID, isWsReady, secondaryChatter, page, wsClient]);
 
-  useEffect(() => {}, []);
-
   return (
-    <div className="top-14 w-full h-[calc(100vh-120px)] bg-green-600 flex flex-col-reverse gap-5 px-2 py-10 scroll-smooth overflow-y-auto">
+    <div className="top-14 w-full h-[calc(100vh-120px)] bg-gray-200 flex flex-col-reverse gap-5 px-2 py-10 scroll-smooth overflow-y-auto">
       <div ref={DivRef} className="w-full h-max flex flex-col gap-5">
         {currentChats.map((chat) => {
           return (

@@ -48,6 +48,13 @@ interface IconProps {
 
 export default function Icon({ name, className = "" }: IconProps) {
   switch (name) {
+    case "Call":
+      return (
+        <FontAwesomeIcon
+          icon={faPhone}
+          className={classNames("text-black text-lg", className)}
+        />
+      );
     case "Dashboard":
       return (
         <FontAwesomeIcon
@@ -76,7 +83,7 @@ export default function Icon({ name, className = "" }: IconProps) {
           className={classNames("text-black text-lg", className)}
         />
       );
-      case "Message":
+    case "Message":
       return (
         <FontAwesomeIcon
           icon={faMessage}
@@ -167,7 +174,7 @@ export default function Icon({ name, className = "" }: IconProps) {
           className={classNames("text-black text-lg", className)}
         />
       );
-      case "FriendRequest":
+    case "FriendRequest":
       return (
         <FontAwesomeIcon
           icon={faUserPlus}

@@ -5,7 +5,7 @@ import Button from "./Button";
 
 export default function Setting() {
   return (
-    <div className="absolute bottom-0 w-full right-0 px-2 h-12 flex bg-gray-600 justify-between items-center">
+    <div className="absolute bottom-0 w-full right-0 px-2 h-16 flex bg-gray-200 border-t border-gray-300 justify-between items-center">
       <p>asd</p>
       <PopupOver content={<Content />} targetIndependent={true}>
         <Loginstatus className="rounded-full bg-transparent" />

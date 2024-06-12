@@ -22,14 +22,14 @@ export default function Search() {
   }, [debouncedValue]);
 
   return (
-    <div className="relative flex items-center rounded-lg px-2 sm:px-3 shadow-[0px_2px_10px_1px_#000000] h-10 w-full bg-gray-800">
+    <div className="relative flex items-center rounded-lg px-2 sm:px-3 h-10 w-full bg-gray-200 my-3">
       {/* <Icon name="Search" className="text-white px-2" /> */}
       <input
         type="search"
         name="searchString"
         onChange={(e) => setInput(e.target.value)}
         id="search"
-        className="outline-none h-full w-full text-white bg-gray-800"
+        className="outline-none border placeholder:text-gray-600 border-gray-400 px-5 rounded-full h-full w-full text-gray-900 active:border bg-gray-200"
         placeholder="Search"
       />
     </div>

@@ -54,12 +54,12 @@ export default function WriteMessage() {
   }
 
   return (
-    <form className="w-full gap-5 h-16 flex items-center px-2">
+    <form className="w-full gap-5 h-16 flex items-center px-2 border-t border-gray-300">
       <button>
         {/* <Icon name="Plus" className="bg-blue-600 p-2 rounded-full" /> */}
       </button>
       <input
-        className="flex-1 bg-gray-700 px-5 rounded-full py-3"
+        className="flex-1 bg-gray-200 outline-none px-5 py-3"
         name="message"
         onKeyDown={SendMessage}
         placeholder="Write your Message"

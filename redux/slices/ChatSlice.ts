@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 interface CurrentChatInterface {
   primaryChatter: string;
   secondaryChatter: string;
+  secondaryChatterName: string;
   chats: { message: string; isReceiver: boolean; time: Date; id: string }[];
 }
 export const updatePrimaryChatter = createAsyncThunk(
@@ -22,6 +23,7 @@ const CHAT_SLICE = createSlice({
   initialState: <CurrentChatInterface>{
     primaryChatter: "",
     secondaryChatter: "",
+    secondaryChatterName: "",
     chats: <
       { message: string; isReceiver: boolean; time: Date; id: string }[]
     >[],
@@ -40,6 +42,9 @@ const CHAT_SLICE = createSlice({
     pushMessage: (state, action) => {
       state.chats.push(...action.payload);
     },
+    updateChatterName: (state, action) => {
+      state.secondaryChatterName = action.payload;
+    },
   },
   extraReducers(builder) {
     builder.addCase(updatePrimaryChatter.fulfilled, (state, action) => {
@@ -55,6 +60,11 @@ const CHAT_SLICE = createSlice({
   },
 });
 
-export const { updateCurrentChatter, updateChats, pushChat, pushMessage } =
-  CHAT_SLICE.actions;
+export const {
+  updateCurrentChatter,
+  updateChats,
+  pushChat,
+  pushMessage,
+  updateChatterName,
+} = CHAT_SLICE.actions;
 export default CHAT_SLICE.reducer;

@@ -10,7 +10,7 @@ export default function Loginstatus({ className, ...rest }: props) {
     <button
       {...rest}
       className={classNames(
-        "flex items-center gap-2 bg-red-500 px-4 py-2 text-white",
+        "flex items-center gap-2 bg-red-500 px-4 py-2 text-gray-7--",
         className
       )}
     >

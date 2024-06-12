@@ -4,7 +4,10 @@ import {
   ChatterInterface,
 } from "../../interfaces/dataInterfaces";
 import { useAppDispatch, useAppSelector } from "../../utils/reduxHooks";
-import { updateCurrentChatter } from "../../redux/slices/ChatSlice";
+import {
+  updateChatterName,
+  updateCurrentChatter,
+} from "../../redux/slices/ChatSlice";
 import useDateDetails from "../../functions/useDateDetails";
 import { useContext, useEffect, useLayoutEffect, useState } from "react";
 import { SERVER_BASE_URL } from "../../utils/constants";
@@ -18,7 +21,7 @@ export default function FriendBox({
   whoMessaged,
   datetime,
 }: ChatterInterface) {
-  const wsClient  = useContext(WsContext);
+  const wsClient = useContext(WsContext);
 
   const { userID: primaryChatter, accessToken } = useAppSelector(
     (state) => state.currentUser
@@ -52,6 +55,10 @@ export default function FriendBox({
         console.log(result);
         setDetails(result);
         console.log(details?.seen);
+        console.log(primaryChatter, result?.participantDetails._id);
+        if (currentChat.secondaryChatter === result?.participantDetails._id) {
+          dispatch(updateChatterName(result?.participantDetails.username));
+        }
         if (result?.seen) {
           setIsMsgWhite(false);
         } else {
@@ -94,15 +101,15 @@ export default function FriendBox({
       if (isActive) {
         setIsMsgWhite(false);
       } else {
+        if (typeof message !== "undefined") {
+          setIsMsgWhite(true);
+          return;
+        }
         if (whoMessaged === chatterID) {
           setIsMsgWhite(true);
           return;
         } else {
           setIsMsgWhite(false);
-          return;
-        }
-        if (typeof message !== "undefined") {
-          setIsMsgWhite(true);
           return;
         }
       }
@@ -122,18 +129,19 @@ export default function FriendBox({
         secondaryChatter: chatterID,
       })
     );
+    dispatch(updateChatterName(details?.participantDetails.username));
     //console.log(primaryChatter, chatterID);
     //console.log("updated");
   }
   return (
     <Link
-      to={`chat/${chatterID}`}
+      to={`/chat/${chatterID}`}
       onClick={updateChatter}
       className={`${
-        isActive ? "bg-gray-700" : "b"
-      } px-2 rounded-lg flex items-center h-16 gap-3 mt-2 w-full`}
+        isActive ? "bg-stone-900/20" : "hover:bg-gray-400/20"
+      } px-2  rounded-lg flex items-center h-16 gap-3 mt-2 w-full`}
     >
-      <div className="relative w-14 h-14 bg-red-500 rounded-full">
+      <div className="relative w-12 h-12 bg-red-500 rounded-full">
         {/* <img
           src={image}
           alt="user image"
@@ -146,12 +154,12 @@ export default function FriendBox({
 
       <div className="flex-1 h-full py-1 flex flex-col justify-start items-start">
         {" "}
-        <p className="text-lg font-bold text-white">
+        <p className="text-lg font-medium text-gray-700">
           {details?.participantDetails.username}
         </p>
         <div
           className={`flex justify-between items-center gap-2 pt-1 ${
-            isMsgWhite ? "text-white font-black" : "text-gray-400 font-normal"
+            isMsgWhite ? "text-red-600 font-black" : "text-gray-700 font-normal"
           }`}
         >
           {message ? (

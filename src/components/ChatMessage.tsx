@@ -7,10 +7,10 @@ export default function ChatMessage({ message, isReceiver }: MessageInterface) {
     <div
       className={`${rotation} ${align} elf-end flex-row-reverse h-12 w-max float-end flex gap-2 items-center`}
     >
-      <div className={`${rotation} h-10 w-10 bg-red-600 rounded-full`}></div>
+      <div className={`${rotation} h-10 w-10 bg-yellow-700 rounded-full`}></div>
       <div>
         <p
-          className={`${rotation} rounded-2xl px-2 py-1 rounded-tr-none bg-gray-500`}
+          className={`${rotation} rounded-2xl px-2 py-1 rounded-tr-none text-gray-800 font-light bg-gray-300`}
         >
           {message}
         </p>
