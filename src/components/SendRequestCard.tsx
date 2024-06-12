@@ -17,7 +17,7 @@ export default function SendRequestCard({ userID, username,email }: props) {
   );
   async function sendRequest() {
     try {
-      console.log("");
+      //console.log("");
       const requestData = { friendID: userID };
       setrequestStatus(SUBMIT_STATUS.LOADING);
       const response = await fetch(SERVER_BASE_URL + "/api/sendFriendRequest", {
@@ -28,7 +28,7 @@ export default function SendRequestCard({ userID, username,email }: props) {
         },
         body: JSON.stringify(requestData),
       });
-      console.log("response", response);
+      //console.log("response", response);
       if (response.ok) {
         setrequestStatus(SUBMIT_STATUS.SUCCESS);
       } else {

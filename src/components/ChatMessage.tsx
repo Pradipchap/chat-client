@@ -1,10 +1,6 @@
 import { MessageInterface } from "../../interfaces/dataInterfaces";
 
-export default function ChatMessage({
-  message,
-  time,
-  isReceiver,
-}: MessageInterface) {
+export default function ChatMessage({ message, isReceiver }: MessageInterface) {
   const rotation = isReceiver ? "-rotate-180" : "";
   const align = isReceiver ? "self-start" : "self-end flex-row-reverse";
   return (

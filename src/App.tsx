@@ -4,7 +4,6 @@ import Login from "./sections/Login.tsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Signup from "./sections/Signup.tsx";
 import AuthenticatedRoute from "./AuthenticatedRoute.tsx";
-import VideoComponent from "./components/VideoComponent.tsx";
 import { lazy, Suspense, useContext, useEffect } from "react";
 import Friends from "./sections/Friends.tsx";
 import FriendsGroup from "./sections/FriendsGroup.tsx";
@@ -33,38 +32,42 @@ import useSound from "../customHooks/useSound.ts";
 import MessageTone from "./assets/messageTone.mp3";
 
 function App() {
-  const { wsClient } = useContext(WsContext);
+  const wsClient = useContext(WsContext);
   const currentUser = useAppSelector((state) => state.currentUser);
   const secondaryChatter = useAppSelector(
     (state) => state.chat.secondaryChatter
   );
-  const primaryChatter = currentUser.userID;
   const dispatch = useAppDispatch();
   const [play, pause] = useSound(MessageTone);
 
   useEffect(() => {
+    //eslint-disable-next-line
     async function handleMessage(connection: MessageEvent<any>) {
       const { message, details } = await getSocketData(connection.data);
-      console.log(secondaryChatter);
-      console.log(primaryChatter);
+      //console.log(secondaryChatter);
+      //console.log(primaryChatter);
       switch (details.type) {
         case "newUser": {
-          console.log("new user");
+          //console.log("new user");
           dispatch(setWsStatus());
           break;
         }
         case "message":
           {
-            console.log(message);
-            console.log("dispatching");
-            console.log(details.sender + " " + secondaryChatter);
+            //console.log(message);
+            //console.log("dispatching");
+            //console.log(details.sender + " " + secondaryChatter);
             if (details.sender === secondaryChatter) {
-              console.log(message);
-              console.log("dispatching");
+              //console.log(message);
+              //console.log("dispatching");
               dispatch(pushMessage([{ message: message, isReceiver: true }]));
             } else {
-              play();
-              pause();
+              if (typeof play !== "boolean") {
+                play();
+              }
+              if (typeof pause !== "boolean") {
+                pause();
+              }
             }
             dispatch(
               updateLatestMessage({
@@ -78,7 +81,7 @@ function App() {
         case "getMess":
           {
             const chat: ChatsDataInterface = JSON.parse(message);
-            console.log(chat);
+            console.log(chat.seen);
             const finalChats = chat.messages.map((item) => {
               const isReceiver = item.sender !== currentUser.userID;
               return {
@@ -89,9 +92,14 @@ function App() {
               };
             });
             const reversedChats = finalChats.reverse();
-            console.log(reversedChats);
+            //console.log(reversedChats);
             if (chat.page === 1) dispatch(updateChats(reversedChats));
             else dispatch(pushChat(reversedChats));
+          }
+          break;
+        case "msgSeen":
+          {
+            //console.log("msg seen");
           }
           break;
         default: {
@@ -111,14 +119,14 @@ function App() {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <AuthenticatedRoute wsClient={wsClient} />,
+      element: <AuthenticatedRoute />,
       children: [
         {
           path: "chat/:chatterID",
           element: <Chat />,
           // loader: async ({ request, params }) => {
           //   if (wsClient.readyState === 1 && params.chatterID !== ""){
-          //     console.log("hello")
+          //     //console.log("hello")
           //     sendSocketMessage({
           //       sender: currentUser.userID,
           //       receiver: params.chatterID || "",
@@ -136,12 +144,7 @@ function App() {
       path: "/login",
       element: <Login />,
     },
-    {
-      path: "/call",
-      element: <VideoComponent wsClient={wsClient} />,
-    },
     { path: "/register", element: <Signup /> },
-    { path: "/map", element: <Map /> },
     {
       path: "/friends",
       element: <Friends />,

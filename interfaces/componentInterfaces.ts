@@ -1,4 +1,4 @@
-import { ReactNode, TextareaHTMLAttributes } from "react";
+import { ButtonHTMLAttributes, ReactNode, TextareaHTMLAttributes } from "react";
 import React, {
   Dispatch,
   HTMLInputTypeAttribute,
@@ -8,7 +8,13 @@ import React, {
 } from "react";
 import { LinkProps } from "react-router-dom";
 
-
+export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  icon?: string;
+  iconClassName?: string;
+  variant?: "primary" | "secondary";
+  iconAlignment?: "left" | "right";
+  children: ReactNode;
+}
 export interface CustomLinkProps {
   className?: string;
   children: React.ReactNode | string;
@@ -41,8 +47,6 @@ export interface StepsProps {
     SetStateAction<{ step: number; response: string }>
   >;
 }
-
-
 
 export interface LabelProps extends React.HTMLProps<HTMLLabelElement> {
   label: string;
@@ -89,8 +93,7 @@ export interface OrDividerProps {
   className?: string;
 }
 
-export interface CustomLinkProp
-  extends LinkProps {
+export interface CustomLinkProp extends LinkProps {
   className?: string;
   variant?: "primary" | "muted";
   icon?: string;
@@ -99,7 +102,7 @@ export interface CustomLinkProp
   isLoading?: boolean;
   children: React.ReactNode;
 }
-export type ToastType="success"|"error"|"info"|"loading"
+export type ToastType = "success" | "error" | "info" | "loading";
 
 export interface Step1FormValues {
   fullname: string;

@@ -1,6 +1,7 @@
 import { DetailsObjectInterface } from "./../interfaces/dataInterfaces";
 
-export default async function getSocketData(data) {
+//eslint-disable-next-line
+export default async function getSocketData(data: any) {
   const details: DetailsObjectInterface = JSON.parse(
     await data.slice(0, 92).text()
   );

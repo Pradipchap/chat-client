@@ -22,7 +22,7 @@ export default function EmailVerification({ email }: { email: string }) {
         otp += otps[key];
       }
     }
-    console.log(Number(otp));
+    //console.log(Number(otp));
     showLoading("loading");
     const requestData = { email, code: Number(otp) };
 

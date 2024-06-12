@@ -1,6 +1,6 @@
 import classNames from "../../utils/classNames";
 import Icon from "./Icon";
-import {ButtonProps} from "../../interfaces/componentInterfaces"
+import { ButtonProps } from "../../interfaces/componentInterfaces";
 
 export default function Button(props: ButtonProps) {
   const {
@@ -18,7 +18,7 @@ export default function Button(props: ButtonProps) {
     variant === "primary"
       ? "border-none"
       : "border-customBlue border text-gray-700 bg-transparent",
-    className,
+    className
   );
 
   return (

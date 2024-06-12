@@ -1,18 +1,10 @@
-import { useEffect, useRef } from "react";
-import sendSocketMessage from "../../functions/sendSocketMessage";
-import {
-  updateCallDetails,
-  requestCall,
-  closeCall,
-} from "../../redux/slices/CallSlice";
+import { updateCallDetails, requestCall } from "../../redux/slices/CallSlice";
 import { useAppDispatch, useAppSelector } from "../../utils/reduxHooks";
 
 export default function ChatBoxTopBar() {
   const dispatch = useAppDispatch();
   const chatDetails = useAppSelector((state) => state.chat);
   const callDetails = useAppSelector((state) => state.call);
-  const counter = useRef<number>(0);
-
 
   // useEffect(() => {
   //   let interval;
@@ -29,10 +21,10 @@ export default function ChatBoxTopBar() {
   //         wsClient: wsClient,
   //       });
 
-  //       console.log(counter.current);
+  //       //console.log(counter.current);
 
   //       if (counter.current >= 10) {
-  //         console.log("first");
+  //         //console.log("first");
   //         clearInterval(interval);
   //         setTimeout(() => {
   //           dispatch(closeCall());

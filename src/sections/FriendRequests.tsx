@@ -53,7 +53,7 @@ function SendRequestCard({ userID, username }: props) {
           body: JSON.stringify(requestData),
         }
       );
-      console.log("response", response);
+      //console.log("response", response);
       if (response.ok) {
         setrequestStatus(SUBMIT_STATUS.SUCCESS);
       } else {
@@ -79,7 +79,7 @@ function SendRequestCard({ userID, username }: props) {
         },
         body: JSON.stringify(requestData),
       });
-      console.log("response", response);
+      //console.log("response", response);
       if (response.ok) {
         setrequestStatusDelete(SUBMIT_STATUS.SUCCESS);
       } else {

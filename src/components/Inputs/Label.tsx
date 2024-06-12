@@ -1,4 +1,4 @@
-import { LabelProps } from "../../../interfaces/ComponentInterfaces";
+import { LabelProps } from "../../../interfaces/componentInterfaces";
 import classNames from "../../../utils/classNames";
 
 export default function Label({ label, className, ...rest }: LabelProps) {
@@ -7,7 +7,7 @@ export default function Label({ label, className, ...rest }: LabelProps) {
       {...rest}
       className={classNames(
         "text-customInputText mb-3 flex flex-col",
-        className,
+        className
       )}
     >
       {label}

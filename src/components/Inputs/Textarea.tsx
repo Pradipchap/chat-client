@@ -1,10 +1,8 @@
-"use client";
-
-import classNames from "@/utils/classNames";
+import classNames from "../../../utils/classNames";
 import {
   ErrorTextProps,
   TextareaProps,
-} from "@/interfaces/ComponentInterfaces";
+} from "../../../interfaces/componentInterfaces";
 import Label from "./Label";
 
 export default function Textarea({
@@ -30,7 +28,7 @@ export default function Textarea({
       <div
         className={classNames(
           `h-11 text-base font-[400] text-customInputText flex justify-center items-center`,
-          containerClassName,
+          containerClassName
         )}
       >
         <textarea
@@ -43,7 +41,7 @@ export default function Textarea({
             `h-full px-2 outline-none w-full rounded-[4px] border ${
               error ? "border-red-600" : "border-customInputBorder"
             }`,
-            className,
+            className
           )}
           {...rest}
         />
@@ -71,7 +69,7 @@ export const ErrorText = ({
     className={classNames(
       "text-red-500 text-sm",
       alignment === "topRight" && "absolute top-0 right-0",
-      className,
+      className
     )}
   >
     {error}

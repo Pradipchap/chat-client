@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function UserCardSkeleton() {
   return (
     <div className="w-full max-w-[250px] p-3 border-slate-200 animate-pulse border rounded-lg shadow">

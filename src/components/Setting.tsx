@@ -2,7 +2,6 @@ import { useNavigate } from "react-router-dom";
 import Loginstatus from "./Loginstatus";
 import PopupOver from "./Popups/Popup";
 import Button from "./Button";
-import { icon } from "leaflet";
 
 export default function Setting() {
   return (

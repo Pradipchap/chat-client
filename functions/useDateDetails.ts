@@ -3,7 +3,7 @@ import returnMonth from "../functions/getMonth";
 
 export default function useDateDetails(datetime: Date) {
   const [timePassed, setTimePassed] = useState(getTime());
-  console.log(datetime.toUTCString());
+  //console.log(datetime.toUTCString());
   function getTime() {
     const givenDateTime = datetime.getTime();
     const currentDateTime = new Date().getTime();

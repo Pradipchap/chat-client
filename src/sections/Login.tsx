@@ -38,7 +38,7 @@ export default function Login() {
         showError("user be registered");
       }
     } catch (error) {
-      console.log(error);
+      //console.log(error);
       showError("user cannot be registered");
     }
   }

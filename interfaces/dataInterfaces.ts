@@ -7,11 +7,14 @@ export interface FriendBoxInterface {
   email: string;
   phone?: "";
   image: string;
+  isNewMessage?: false;
   dateofbirth: Date;
+  seen: boolean;
 }
 
 export interface ChatsDataInterface {
   page: number;
+  seen: boolean;
   messages: {
     message: string;
     sender: string;
@@ -37,6 +40,7 @@ export interface ChatterDetailsInterface {
     _id: string;
     datetime: string;
   };
+  seen: boolean;
   participantDetails: {
     _id: string;
     email: string;
@@ -76,7 +80,8 @@ export interface DetailsObjectInterface {
     | "callRej"
     | "callAcc"
     | "callTmo"
-    | "getMess";
+    | "getMess"
+    | "msgSeen";
   sender: string;
   receiver: string;
 }

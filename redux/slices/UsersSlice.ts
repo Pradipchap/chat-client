@@ -27,7 +27,7 @@ export const fetchUsers = createAsyncThunk(
       dispatch(updateSecondaryChatter(finalUsers[0]._id));
       return finalUsers;
     } catch (error) {
-      console.log(error);
+      //console.log(error);
       return [];
     }
   }
@@ -49,7 +49,7 @@ export const fetchChatters = createAsyncThunk(
       console.log(results.users);
       return results.users;
     } catch (error) {
-      console.log(error);
+      //console.log(error);
       return [];
     }
   }
@@ -72,10 +72,10 @@ const USER_SLICE = createSlice({
     },
     updateLatestMessage: (state, action) => {
       const { messagerID, message, datetime, whoMessaged } = action.payload;
-      console.log(messagerID, message);
+      //console.log(messagerID, message);
       state.chatters.forEach((element, index) => {
         if (element.chatterID === messagerID) {
-          console.log(element);
+          //console.log(element);
           state.chatters.splice(index, 1);
           state.chatters.splice(0, 0, {
             _id: element._id,

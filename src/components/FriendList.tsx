@@ -3,7 +3,7 @@ import { ChatterInterface } from "../../interfaces/dataInterfaces";
 import { useAppSelector } from "../../utils/reduxHooks";
 
 export default function FriendList() {
-  const users = useAppSelector((state) => state.users.chatters);
+  const chatters = useAppSelector((state) => state.users.chatters);
   const loading = useAppSelector((state) => state.users.loading);
   const error = useAppSelector((state) => state.users.error);
 
@@ -15,10 +15,10 @@ export default function FriendList() {
   } else
     return (
       <div>
-        {users.length === 0 ? (
+        {chatters.length === 0 ? (
           <p>No users</p>
         ) : (
-          users.map((element: ChatterInterface) => {
+          chatters.map((element: ChatterInterface) => {
             return <FriendBox key={element._id} {...element} />;
           })
         )}

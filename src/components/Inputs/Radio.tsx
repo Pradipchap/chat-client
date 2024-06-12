@@ -1,5 +1,5 @@
-import classNames from "@/utils/classNames";
-import React, { InputHTMLAttributes } from "react";
+import classNames from "../../../utils/classNames";
+import { InputHTMLAttributes } from "react";
 
 interface RadioProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
@@ -21,7 +21,7 @@ export default function Radio({
         htmlFor={name}
         className={classNames(
           "flex gap-2 items-center justify-center text-xl text-customBlue",
-          labelClassName,
+          labelClassName
         )}
       >
         <input
@@ -39,7 +39,7 @@ export default function Radio({
         htmlFor={name}
         className={classNames(
           "flex gap-2 items-center justify-center text-xl text-customBlue",
-          labelClassName,
+          labelClassName
         )}
       >
         <input

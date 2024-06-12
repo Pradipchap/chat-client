@@ -13,7 +13,7 @@ import { useParams } from "react-router-dom";
 import { WsContext } from "../../utils/WsProvider";
 
 export default function ChatMessageArea() {
-  const { wsClient } = useContext(WsContext);
+  const wsClient = useContext(WsContext);
   const currentChats = useAppSelector((state) => state.chat.chats);
   const params = useParams();
   const userID = useAppSelector((state) => state.currentUser.userID);
@@ -22,7 +22,6 @@ export default function ChatMessageArea() {
   const isWsReady = useAppSelector((state) => state.ws.isActive);
 
   const DivRef = useRef<HTMLDivElement>(null);
-  const spinnerRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
     if (DivRef.current) DivRef.current.scrollTop = DivRef.current.scrollHeight;
@@ -30,9 +29,9 @@ export default function ChatMessageArea() {
 
   useEffect(() => {
     function getChats() {
-      console.log('retrieving')
-      console.log(secondaryChatter)
-      console.log(wsClient)
+      //console.log("retrieving");
+      //console.log(secondaryChatter);
+      //console.log(wsClient);
       sendSocketMessage({
         sender: userID,
         receiver: secondaryChatter || "",
@@ -48,37 +47,9 @@ export default function ChatMessageArea() {
       wsClient instanceof WebSocket
     )
       getChats();
-      else{
-        console.log(isWsReady,userID,secondaryChatter,wsClient instanceof WebSocket)
-      }
   }, [userID, isWsReady, secondaryChatter, page, wsClient]);
 
-  useEffect(() => {
-    console.log(wsClient)
-  }, [wsClient])
-  
-
-  // useEffect(() => {
-  //   function onIntersection(entries: IntersectionObserverEntry[]) {
-  //     if (entries.length > 0) {
-  //       if (entries[0].isIntersecting) {
-  //         console.log("paginating");
-  //         setPage((page) => page + 1);
-  //         console.log(page);
-  //         return () => intersection.disconnect();
-  //       }
-  //     }
-  //   }
-
-  //   const intersection = new IntersectionObserver(onIntersection);
-
-  //   if (intersection && currentChats.length > 0 && spinnerRef.current)
-  //     intersection.observe(spinnerRef.current as Element);
-
-  //   return () => {
-  //     intersection.disconnect();
-  //   };
-  // }, [currentChats]);
+  useEffect(() => {}, []);
 
   return (
     <div className="top-14 w-full h-[calc(100vh-120px)] bg-green-600 flex flex-col-reverse gap-5 px-2 py-10 scroll-smooth overflow-y-auto">

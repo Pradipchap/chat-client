@@ -61,15 +61,15 @@ export default function Friends() {
             dispatch(updateFriendRequests(data.users));
             setTotalData(data.noOfUsers);
           } else if (currentPath === "friends") {
-            console.log("first");
+            //console.log("first");
             dispatch(updateFriends(data.users));
             setTotalData(data.noOfUsers);
           } else {
-            console.log("nothing");
+            //console.log("nothing");
           }
         }
       } catch (error) {
-        console.log(error);
+        //console.log(error);
       }
     }
     getData();

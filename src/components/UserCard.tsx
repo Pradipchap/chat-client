@@ -9,10 +9,9 @@ interface props {
   email: string;
   image?: string;
 }
-export default function UserCard({ username, email, userID }: props) {
-  const [requestStatus, setRequestStatus] = useState<SUBMIT_STATUS>(
-    SUBMIT_STATUS.IDLE
-  );
+export default function UserCard({ username, userID }: props) {
+  //eslint-disable-next-line
+  const [requestStatus] = useState<SUBMIT_STATUS>(SUBMIT_STATUS.IDLE);
   return (
     <div className="w-full max-w-[250px] h-max p-3 bg-white border border-gray-200 rounded-lg shadow">
       <div className="flex flex-col items-center justify-between">
