@@ -1,9 +1,9 @@
 import { ReactNode, createContext, useEffect, useState } from "react";
 import { useAppSelector } from "./reduxHooks";
 import sendSocketMessage from "../functions/sendSocketMessage";
-import { SERVER_BASE_URL } from "./constants";
+import { WEBSOCKET_BASE_URL } from "./constants";
 
-const WS_URL = `wss://${SERVER_BASE_URL}`;
+const WS_URL = WEBSOCKET_BASE_URL;
 
 export const WsContext = createContext<null | WebSocket>(null);
 
