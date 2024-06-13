@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   ChatterDetailsInterface,
   ChatterInterface,
@@ -9,7 +9,13 @@ import {
   updateCurrentChatter,
 } from "../../redux/slices/ChatSlice";
 import useDateDetails from "../../functions/useDateDetails";
-import { useContext, useEffect, useLayoutEffect, useState } from "react";
+import {
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useState,
+} from "react";
 import { SERVER_BASE_URL } from "../../utils/constants";
 import sendSocketMessage from "../../functions/sendSocketMessage";
 import { WsContext } from "../../utils/WsProvider";
@@ -29,8 +35,10 @@ export default function FriendBox({
   const currentChat = useAppSelector((state) => state.chat);
 
   const [details, setDetails] = useState<ChatterDetailsInterface | null>(null);
-  const isActive =
-    currentChat.secondaryChatter === details?.participantDetails._id;
+  const isActive = useMemo(
+    () => currentChat.secondaryChatter === details?.participantDetails._id,
+    [currentChat, details]
+  );
   const timePassed = useDateDetails(
     new Date(
       datetime ? datetime : details?.latestMessage?.datetime || new Date()
@@ -39,6 +47,7 @@ export default function FriendBox({
 
   const [isMsgWhite, setIsMsgWhite] = useState(false);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function getChatterDetails() {
@@ -52,12 +61,12 @@ export default function FriendBox({
           body: JSON.stringify({ requestID: chatterID }),
         });
         const result: ChatterDetailsInterface = await response.json();
-        console.log(result);
         setDetails(result);
-        console.log(details?.seen);
         console.log(primaryChatter, result?.participantDetails._id);
-        if (currentChat.secondaryChatter === result?.participantDetails._id) {
+        const probableChatterID = result?.participantDetails._id;
+        if (currentChat.secondaryChatter === probableChatterID) {
           dispatch(updateChatterName(result?.participantDetails.username));
+          navigate(`/chat/${probableChatterID}`);
         }
         if (result?.seen) {
           setIsMsgWhite(false);

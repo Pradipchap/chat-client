@@ -34,6 +34,7 @@ const CHAT_SLICE = createSlice({
       state.secondaryChatter = action.payload.secondaryChatter;
     },
     updateChats: (state, action) => {
+      console.log(action.type);
       state.chats = action.payload;
     },
     pushChat: (state, action) => {

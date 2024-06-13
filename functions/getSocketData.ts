@@ -6,7 +6,6 @@ export default async function getSocketData(data: any) {
     await data.slice(0, 92).text()
   );
   const messageBlob = await data.slice(92);
-  const message = await messageBlob.text();
-
+  const message = await new Response(messageBlob).text();
   return { message, details };
 }

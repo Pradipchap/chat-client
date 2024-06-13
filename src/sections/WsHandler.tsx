@@ -62,8 +62,10 @@ export default function WsHandler() {
           break;
         case "getMess":
           {
+            console.log(message);
             const chat: ChatsDataInterface = JSON.parse(message);
-            console.log(chat.seen);
+            console.log(chat);
+
             const finalChats = chat.messages.map((item) => {
               const isReceiver = item.sender !== currentUser.userID;
               return {
@@ -74,7 +76,7 @@ export default function WsHandler() {
               };
             });
             const reversedChats = finalChats.reverse();
-            //console.log(reversedChats);
+            console.log(reversedChats);
             if (chat.page === 1) dispatch(updateChats(reversedChats));
             else dispatch(pushChat(reversedChats));
           }
