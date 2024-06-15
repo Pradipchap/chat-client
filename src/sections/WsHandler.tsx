@@ -83,7 +83,9 @@ export default function WsHandler() {
           break;
         case "msgSeen":
           {
-            //console.log("msg seen");
+            // console.log(details);
+            console.log(currentUser.username)
+            console.log("msg seen");
           }
           break;
         default: {

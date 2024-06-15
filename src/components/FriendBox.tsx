@@ -49,7 +49,7 @@ export default function FriendBox({
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     async function getChatterDetails() {
       try {
         const response = await fetch(`${SERVER_BASE_URL}/api/getChatter`, {
@@ -81,8 +81,8 @@ export default function FriendBox({
   }, []);
 
   useEffect(() => {
-    if (wsClient instanceof WebSocket && isActive) {
-      console.log("first");
+    if (wsClient instanceof WebSocket && isActive && isMsgWhite) {
+      setIsMsgWhite(false);
       sendSocketMessage({
         sender: primaryChatter,
         receiver: chatterID || "",
@@ -111,10 +111,12 @@ export default function FriendBox({
         setIsMsgWhite(false);
       } else {
         if (typeof message !== "undefined") {
+          console.log("first");
           setIsMsgWhite(true);
           return;
         }
         if (whoMessaged === chatterID) {
+          console.log("ads");
           setIsMsgWhite(true);
           return;
         } else {
@@ -125,7 +127,7 @@ export default function FriendBox({
     }
 
     handleMsgWhite();
-  }, [isActive, message]);
+  }, [message]);
 
   if (typeof _id === "undefined") {
     return null;
