@@ -40,8 +40,10 @@ export interface ChatterDetailsInterface {
     _id: string;
     datetime: string;
   };
+  isActive: boolean;
   seen: boolean;
   participantDetails: {
+    image: string;
     _id: string;
     email: string;
     username: string;

@@ -5,8 +5,8 @@ import {
 } from "../../interfaces/dataInterfaces";
 import { useAppDispatch, useAppSelector } from "../../utils/reduxHooks";
 import {
-  updateChatterName,
-  updateCurrentChatter,
+  updateChatterDetails,
+  updateSeenStatus,
 } from "../../redux/slices/ChatSlice";
 import useDateDetails from "../../functions/useDateDetails";
 import {
@@ -65,11 +65,17 @@ export default function FriendBox({
         console.log(primaryChatter, result?.participantDetails._id);
         const probableChatterID = result?.participantDetails._id;
         if (currentChat.secondaryChatter === probableChatterID) {
-          dispatch(updateChatterName(result?.participantDetails.username));
+          dispatch(
+            updateChatterDetails({
+              name: result?.participantDetails.username,
+              image: result.participantDetails.image,
+            })
+          );
           navigate(`/chat/${probableChatterID}`);
         }
         if (result?.seen) {
           setIsMsgWhite(false);
+          dispatch(updateSeenStatus(true));
         } else {
           setIsMsgWhite(true);
         }
@@ -135,12 +141,14 @@ export default function FriendBox({
 
   function updateChatter() {
     dispatch(
-      updateCurrentChatter({
+      updateChatterDetails({
         primaryChatter: primaryChatter,
         secondaryChatter: chatterID,
+        name: details?.participantDetails.username,
+        image: details?.participantDetails.image,
       })
     );
-    dispatch(updateChatterName(details?.participantDetails.username));
+    // dispatch(updateChatterName(details?.participantDetails.username));
     //console.log(primaryChatter, chatterID);
     //console.log("updated");
   }
@@ -160,9 +168,10 @@ export default function FriendBox({
           width={20}
           className="h-full w-full rounded-full"
         /> */}
-        <div className="h-3 w-3 bg-green-600 rounded-full absolute bottom-[2%] right-[10%]" />
+        {details?.isActive && (
+          <div className="h-3.5 w-3.5 bg-green-600 rounded-full absolute bottom-[2%] right-[10%]" />
+        )}
       </div>
-
       <div className="flex-1 h-full py-1 flex flex-col justify-start items-start">
         {" "}
         <p className="text-lg font-medium text-gray-700">

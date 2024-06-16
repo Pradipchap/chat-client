@@ -12,9 +12,7 @@ import UserProfile from "./sections/UserProfile.tsx";
 import { SERVER_BASE_URL } from "../utils/constants.ts";
 import Chat from "./components/ChatBox.tsx";
 import { useAppSelector } from "../utils/reduxHooks.ts";
-import WsHandler from "./sections/WsHandler.tsx";
 import Home from "./sections/Home.tsx";
-
 const AddFriends = lazy(async () => import(".//sections/AddFriends.tsx"));
 const FriendRequests = lazy(async () =>
   import("./sections/FriendRequests.tsx")
@@ -91,7 +89,6 @@ function App() {
   return (
     <>
       <Toast />
-      <WsHandler />
       <RouterProvider router={router} />
     </>
   );

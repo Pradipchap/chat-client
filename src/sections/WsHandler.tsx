@@ -9,18 +9,18 @@ import {
   pushChat,
   pushMessage,
   updateChats,
+  updateSeenStatus,
 } from "../../redux/slices/ChatSlice";
 import { updateLatestMessage } from "../../redux/slices/UsersSlice";
 import { ChatsDataInterface } from "../../interfaces/dataInterfaces";
+import getSecondaryChatter from "../../customHooks/useGetChatter";
 
 export default function WsHandler() {
   const wsClient = useContext(WsContext);
   const currentUser = useAppSelector((state) => state.currentUser);
-  const secondaryChatter = useAppSelector(
-    (state) => state.chat.secondaryChatter
-  );
   const dispatch = useAppDispatch();
   const [play, pause] = useSound(MessageTone);
+  const secondaryChatter = getSecondaryChatter();
 
   useEffect(() => {
     //eslint-disable-next-line
@@ -36,12 +36,12 @@ export default function WsHandler() {
         }
         case "message":
           {
-            //console.log(message);
+            console.log(message);
             //console.log("dispatching");
-            //console.log(details.sender + " " + secondaryChatter);
+            console.log(details.sender + "p " + secondaryChatter);
             if (details.sender === secondaryChatter) {
               //console.log(message);
-              //console.log("dispatching");
+              console.log("dispatching");
               dispatch(pushMessage([{ message: message, isReceiver: true }]));
             } else {
               if (typeof play !== "boolean") {
@@ -84,8 +84,9 @@ export default function WsHandler() {
         case "msgSeen":
           {
             // console.log(details);
-            console.log(currentUser.username)
+            console.log(currentUser.username);
             console.log("msg seen");
+            dispatch(updateSeenStatus(true));
           }
           break;
         default: {

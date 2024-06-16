@@ -15,6 +15,7 @@ import { WsContext } from "../../utils/WsProvider";
 export default function ChatMessageArea() {
   const wsClient = useContext(WsContext);
   const currentChats = useAppSelector((state) => state.chat.chats);
+  const isSeen = useAppSelector((state) => state.chat.isSeen);
   const params = useParams();
   const userID = useAppSelector((state) => state.currentUser.userID);
   const secondaryChatter = params.chatterID;
@@ -64,6 +65,13 @@ export default function ChatMessageArea() {
             </Fragment>
           );
         })}
+        {isSeen && (
+          <img
+            className="self-end text-gray-500 px-2"
+            height={12}
+            width={12}
+          ></img>
+        )}
       </div>
       {/* <div ref={spinnerRef} className="w-full flex justify-center">
         <Icon name="Loading" className="animate-spin" />

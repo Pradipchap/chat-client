@@ -2,6 +2,8 @@ import Ringtone from "../assets/ringtone.mp3";
 import { useEffect, useMemo } from "react";
 import { useAppSelector } from "../../utils/reduxHooks";
 import { Outlet } from "react-router-dom";
+import WsHandler from "./WsHandler";
+
 export default function Front() {
   const audio = useMemo(() => new Audio(Ringtone), []);
   const callStatus = useAppSelector((state) => state.call.callStatus);
@@ -26,6 +28,7 @@ export default function Front() {
 
   return (
     <main>
+      <WsHandler />
       <Outlet />
     </main>
   );

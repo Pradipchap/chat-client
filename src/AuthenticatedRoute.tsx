@@ -8,9 +8,8 @@ export default function AuthenticatedRoute() {
   if (userDetails === null) {
     return <Navigate to="/login" />;
   } else {
-    console.log("first")
     if (pathName.pathname === "/") {
-      console.log("first")
+      console.log("first");
       return <Navigate to={"/chat"} />;
     } else return <Front />;
   }
