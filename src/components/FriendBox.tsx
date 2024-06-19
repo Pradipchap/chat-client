@@ -19,6 +19,7 @@ import {
 import { SERVER_BASE_URL } from "../../utils/constants";
 import sendSocketMessage from "../../functions/sendSocketMessage";
 import { WsContext } from "../../utils/WsProvider";
+import useGetChatter from "../../customHooks/useGetChatter";
 
 export default function FriendBox({
   chatterID,
@@ -32,12 +33,15 @@ export default function FriendBox({
   const { userID: primaryChatter, accessToken } = useAppSelector(
     (state) => state.currentUser
   );
-  const currentChat = useAppSelector((state) => state.chat);
+  const secondaryChatter = useGetChatter();
+  const secondaryChatterFromRedux = useAppSelector(
+    (state) => state.chat.secondaryChatter
+  );
 
   const [details, setDetails] = useState<ChatterDetailsInterface | null>(null);
   const isActive = useMemo(
-    () => currentChat.secondaryChatter === details?.participantDetails._id,
-    [currentChat, details]
+    () => secondaryChatter === details?.participantDetails._id,
+    [secondaryChatter, details]
   );
   const timePassed = useDateDetails(
     new Date(
@@ -64,7 +68,7 @@ export default function FriendBox({
         setDetails(result);
         console.log(primaryChatter, result?.participantDetails._id);
         const probableChatterID = result?.participantDetails._id;
-        if (currentChat.secondaryChatter === probableChatterID) {
+        if (secondaryChatterFromRedux === probableChatterID) {
           dispatch(
             updateChatterDetails({
               name: result?.participantDetails.username,

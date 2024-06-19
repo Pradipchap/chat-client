@@ -1,24 +1,48 @@
-import { useEffect, useState } from "react";
-import { updateUsers } from "../../redux/slices/UsersSlice";
-import { useAppDispatch } from "../../utils/reduxHooks";
-import { UserFetchResults } from "../../interfaces/dataInterfaces";
+import {  useEffect, useRef, useState } from "react";
+import { updateChatters } from "../../redux/slices/UsersSlice";
+import { useAppDispatch, useAppSelector } from "../../utils/reduxHooks";
 import { SERVER_BASE_URL } from "../../utils/constants";
 import useDebounce from "../../customHooks/useDebounce";
 
 export default function Search() {
+  const x = useRef(1);
+  const accessToken = useAppSelector((state) => state.currentUser.accessToken);
   const dispatch = useAppDispatch();
   const [input, setInput] = useState("");
   const debouncedValue = useDebounce(input);
+  const chatters = useAppSelector((state) => state.users.chatters);
+  const [memoizedChatter, setMemoizedChatter] = useState(chatters);
 
   useEffect(() => {
-    async function fetchUsers() {
-      const response = await fetch(
-        `${SERVER_BASE_URL}/api/users/search?searchString=${debouncedValue}`
-      );
-      const users: UserFetchResults = await response.json();
-      dispatch(updateUsers(users.users));
+    if (x.current <= 1) {
+      setMemoizedChatter(chatters);
     }
-    if (debouncedValue !== "") fetchUsers();
+  }, [chatters]);
+
+  useEffect(() => {
+    if (debouncedValue === "") {
+      if (x.current > 1) dispatch(updateChatters(memoizedChatter));
+      return;
+    }
+    async function fetchUsers() {
+      x.current = x.current + 1;
+      console.log(x.current);
+      if (debouncedValue === "") return;
+      const response = await fetch(`${SERVER_BASE_URL}/api/users/search`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer" + " " + accessToken,
+        },
+        body: JSON.stringify({
+          searchString: debouncedValue,
+        }),
+      });
+
+      const users = await response.json();
+      dispatch(updateChatters(users.users));
+    }
+    fetchUsers();
   }, [debouncedValue]);
 
   return (

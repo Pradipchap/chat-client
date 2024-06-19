@@ -91,6 +91,9 @@ const USER_SLICE = createSlice({
       state.chatters = action.payload;
       state.loading = false;
     },
+    pushChatters: (state, action) => {
+      state.chatters = [...state.chatters, ...action.payload];
+    },
     updateFriends: (state, action) => {
       state.Friends = action.payload;
     },
@@ -125,5 +128,6 @@ export const {
   updateFriends,
   updateFriendRequests,
   updateLatestMessage,
+  pushChatters
 } = USER_SLICE.actions;
 export default USER_SLICE.reducer;

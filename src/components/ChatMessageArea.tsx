@@ -1,55 +1,85 @@
-import {
-  Fragment,
-  useContext,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import { Fragment, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useAppSelector } from "../../utils/reduxHooks";
 import ChatMessage from "./ChatMessage";
-import sendSocketMessage from "../../functions/sendSocketMessage";
 import { useParams } from "react-router-dom";
-import { WsContext } from "../../utils/WsProvider";
+import useInfiniteScrolling from "../../customHooks/useInfiniteScrolling";
+import { SERVER_BASE_URL } from "../../utils/constants";
+import {
+  ChatsDataInterface,
+  MessageInterface,
+} from "../../interfaces/dataInterfaces";
+import Icon from "./Icon";
 
 export default function ChatMessageArea() {
-  const wsClient = useContext(WsContext);
-  const currentChats = useAppSelector((state) => state.chat.chats);
+  const [currentChats, setCurrentChats] = useState<MessageInterface[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const isSeen = useAppSelector((state) => state.chat.isSeen);
   const params = useParams();
-  const userID = useAppSelector((state) => state.currentUser.userID);
+  const currentUser = useAppSelector((state) => state.currentUser);
   const secondaryChatter = params.chatterID;
   const [page, setPage] = useState(1);
-  const isWsReady = useAppSelector((state) => state.ws.isActive);
-
   const DivRef = useRef<HTMLDivElement>(null);
+  const spinnerRef = useRef<HTMLDivElement | null>(null);
+
+  // useEffect(() => {}, []);
+
+  useInfiniteScrolling(spinnerRef, isLoading, () => {
+    setPage((page) => page + 1);
+  });
 
   useLayoutEffect(() => {
     if (DivRef.current) DivRef.current.scrollTop = DivRef.current.scrollHeight;
   }, []);
 
   useEffect(() => {
-    function getChats() {
-      //console.log("retrieving");
-      console.log(secondaryChatter);
-      //console.log(wsClient);
-      sendSocketMessage({
-        sender: userID,
-        receiver: secondaryChatter || "",
-        type: "getMess",
-        data: new Blob([JSON.stringify({ page })]),
-        wsClient: wsClient,
-      });
+    async function getChats() {
+      setIsLoading(true);
+      try {
+        const response = await fetch(`${SERVER_BASE_URL}/api/chats`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer" + " " + currentUser.accessToken,
+          },
+          body: JSON.stringify({
+            requestID: secondaryChatter,
+            page,
+          }),
+        });
+        if (!(await response.ok)) {
+          throw "";
+        }
+        const chats: ChatsDataInterface = await response.json();
+        const finalChats: {
+          message: string;
+          isReceiver: boolean;
+          time: Date;
+          id: string;
+        }[] = await chats.messages.map((item) => {
+          const isReceiver = item.sender !== currentUser.userID;
+          return {
+            message: item.message,
+            isReceiver,
+            time: new Date(item.datetime),
+            id: item._id,
+          };
+        });
+        const reversedChats = await finalChats.reverse();
+        console.log(reversedChats);
+        if (chats.page === 1) {
+          console.log(1);
+          setCurrentChats(await reversedChats);
+        } else {
+          setCurrentChats((state) => [...reversedChats, ...state]);
+        }
+      } catch (error) {
+        setCurrentChats((state) => [...state]);
+      } finally {
+        setIsLoading(false);
+      }
     }
-    if (
-      isWsReady === true &&
-      userID !== "" &&
-      secondaryChatter !== "" &&
-      typeof secondaryChatter !== "undefined" &&
-      wsClient instanceof WebSocket
-    )
-      getChats();
-  }, [userID, isWsReady, secondaryChatter, page, wsClient]);
+    if (currentUser.accessToken !== "" && secondaryChatter) getChats();
+  }, [currentUser, secondaryChatter, page]);
 
   return (
     <div className="top-14 w-full h-[calc(100vh-120px)] bg-gray-200 flex flex-col-reverse gap-5 px-2 py-10 scroll-smooth overflow-y-auto">
@@ -58,6 +88,7 @@ export default function ChatMessageArea() {
           return (
             <Fragment key={chat.id}>
               <ChatMessage
+                id={chat.id}
                 isReceiver={chat.isReceiver}
                 message={chat.message}
                 time={new Date()}
@@ -73,16 +104,15 @@ export default function ChatMessageArea() {
           ></img>
         )}
       </div>
-      {/* <div ref={spinnerRef} className="w-full flex justify-center">
-        <Icon name="Loading" className="animate-spin" />
-      </div> */}
-      {currentChats.length > 10 && (
-        <button
+
+      {currentChats.length >= 20 && (
+        <div
+          ref={spinnerRef}
           onClick={() => setPage((page) => page + 1)}
-          className=" self-center bg-red-800 rounded-full px-3 py-1 text-white w-max border border-red-900"
+          className="self-center w-max"
         >
-          older
-        </button>
+          <Icon name="Loading" />
+        </div>
       )}
     </div>
   );

@@ -12,15 +12,16 @@ export interface FriendBoxInterface {
   seen: boolean;
 }
 
+export interface MessageInterface {
+  message: string;
+  isReceiver: boolean;
+  time: Date;
+  id: string;
+}
 export interface ChatsDataInterface {
   page: number;
   seen: boolean;
-  messages: {
-    message: string;
-    sender: string;
-    _id: string;
-    datetime: Date;
-  }[];
+  messages: { message: string; sender: string; _id: string; datetime: Date }[];
 }
 
 export interface ChatterInterface {
@@ -63,12 +64,6 @@ export interface LoginResult {
   username: string;
   userID: string;
   websocketId: string;
-}
-
-export interface MessageInterface {
-  message: string;
-  time?: Date;
-  isReceiver: boolean;
 }
 
 export interface DetailsObjectInterface {
