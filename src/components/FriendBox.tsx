@@ -10,6 +10,7 @@ import {
 } from "../../redux/slices/ChatSlice";
 import useDateDetails from "../../functions/useDateDetails";
 import {
+  Suspense,
   useContext,
   useEffect,
   useLayoutEffect,
@@ -20,8 +21,17 @@ import { SERVER_BASE_URL } from "../../utils/constants";
 import sendSocketMessage from "../../functions/sendSocketMessage";
 import { WsContext } from "../../utils/WsProvider";
 import useGetChatter from "../../customHooks/useGetChatter";
+import FriendBoxSkeleton from "./FriendBoxSkeleton";
 
-export default function FriendBox({
+export default function FriendBox({ ...props }: ChatterInterface) {
+  return (
+    <Suspense fallback={<FriendBoxSkeleton />}>
+      <FriendBoxUI {...props} />
+    </Suspense>
+  );
+}
+
+function FriendBoxUI({
   chatterID,
   _id,
   message,
@@ -65,6 +75,7 @@ export default function FriendBox({
           body: JSON.stringify({ requestID: chatterID }),
         });
         const result: ChatterDetailsInterface = await response.json();
+        console.log(result);
         setDetails(result);
         console.log(primaryChatter, result?.participantDetails._id);
         const probableChatterID = result?.participantDetails._id;

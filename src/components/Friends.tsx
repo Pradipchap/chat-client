@@ -1,6 +1,7 @@
 import Search from "./Search";
 import FriendList from "./FriendList";
 import Setting from "./Setting";
+import { Suspense } from "react";
 
 export default function Friends() {
   return (
@@ -8,7 +9,9 @@ export default function Friends() {
       <div className="h-[calc(100vh-48px)] overflow-y-auto">
         <h1 className="text-2xl">Chats</h1>
         <Search />
-        <FriendList />
+        <Suspense fallback={null}>
+          <FriendList />
+        </Suspense>
       </div>
       <Setting />
     </div>

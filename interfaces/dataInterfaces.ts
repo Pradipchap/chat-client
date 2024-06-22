@@ -27,6 +27,9 @@ export interface ChatsDataInterface {
 export interface ChatterInterface {
   _id: string;
   chatterID: string;
+  isFriend?: boolean;
+  gotRequest?: boolean;
+  sentRequest?: boolean;
   message?: string;
   whoMessaged?: string;
   datetime?: string;

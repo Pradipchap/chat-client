@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import Vite from "../../public/vite.svg";
+import Vite from "../../src/assets/google.svg";
 interface CurrentChatInterface {
   primaryChatter: string;
   secondaryChatter: string;

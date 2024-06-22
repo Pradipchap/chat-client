@@ -1,4 +1,3 @@
-import FriendBox from "./FriendBox";
 import {
   ChatterDetailsInterface,
   ChatterInterface,
@@ -6,7 +5,8 @@ import {
 import { useAppDispatch, useAppSelector } from "../../utils/reduxHooks";
 import FriendBoxSkeleton from "./FriendBoxSkeleton";
 import useInfiniteScrolling from "../../customHooks/useInfiniteScrolling";
-import { useEffect, useRef, useState } from "react";
+import { lazy, startTransition, useEffect, useRef, useState } from "react";
+const FriendBox = lazy(() => import("./FriendBox.tsx"));
 import Icon from "./Icon";
 import { SERVER_BASE_URL } from "../../utils/constants";
 import { pushChatters } from "../../redux/slices/UsersSlice";
@@ -45,7 +45,9 @@ export default function FriendList() {
           users: ChatterDetailsInterface[];
         } = await response.json();
         console.log(results.users);
-        dispatch(pushChatters(results.users));
+        startTransition(() => {
+          dispatch(pushChatters(results.users));
+        });
       } finally {
         setIsLoading(false);
       }

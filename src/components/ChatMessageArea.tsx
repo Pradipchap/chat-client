@@ -1,17 +1,15 @@
 import { Fragment, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { useAppSelector } from "../../utils/reduxHooks";
+import { useAppDispatch, useAppSelector } from "../../utils/reduxHooks";
 import ChatMessage from "./ChatMessage";
 import { useParams } from "react-router-dom";
 import useInfiniteScrolling from "../../customHooks/useInfiniteScrolling";
 import { SERVER_BASE_URL } from "../../utils/constants";
-import {
-  ChatsDataInterface,
-  MessageInterface,
-} from "../../interfaces/dataInterfaces";
+import { ChatsDataInterface } from "../../interfaces/dataInterfaces";
 import Icon from "./Icon";
+import { updateChats } from "../../redux/slices/ChatSlice";
 
 export default function ChatMessageArea() {
-  const [currentChats, setCurrentChats] = useState<MessageInterface[]>([]);
+  const currentChats = useAppSelector((state) => state.chat.chats);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const isSeen = useAppSelector((state) => state.chat.isSeen);
   const params = useParams();
@@ -20,9 +18,7 @@ export default function ChatMessageArea() {
   const [page, setPage] = useState(1);
   const DivRef = useRef<HTMLDivElement>(null);
   const spinnerRef = useRef<HTMLDivElement | null>(null);
-
-  // useEffect(() => {}, []);
-
+  const dispatch = useAppDispatch();
   useInfiniteScrolling(spinnerRef, isLoading, () => {
     setPage((page) => page + 1);
   });
@@ -65,15 +61,15 @@ export default function ChatMessageArea() {
           };
         });
         const reversedChats = await finalChats.reverse();
-        console.log(reversedChats);
         if (chats.page === 1) {
-          console.log(1);
-          setCurrentChats(await reversedChats);
+          // setCurrentChats(await reversedChats);
+          dispatch(updateChats(await reversedChats));
         } else {
-          setCurrentChats((state) => [...reversedChats, ...state]);
+          dispatch(updateChats([...currentChats, ...reversedChats]));
+          // dispatch
         }
       } catch (error) {
-        setCurrentChats((state) => [...state]);
+        // setCurrentChats((state) => [...state]);
       } finally {
         setIsLoading(false);
       }

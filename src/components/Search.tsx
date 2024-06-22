@@ -1,4 +1,4 @@
-import {  useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, startTransition } from "react";
 import { updateChatters } from "../../redux/slices/UsersSlice";
 import { useAppDispatch, useAppSelector } from "../../utils/reduxHooks";
 import { SERVER_BASE_URL } from "../../utils/constants";
@@ -21,33 +21,47 @@ export default function Search() {
 
   useEffect(() => {
     if (debouncedValue === "") {
-      if (x.current > 1) dispatch(updateChatters(memoizedChatter));
+      if (x.current > 1) {
+        startTransition(() => {
+          dispatch(updateChatters(memoizedChatter));
+        });
+      }
       return;
     }
+    
     async function fetchUsers() {
-      x.current = x.current + 1;
+      x.current += 1;
       console.log(x.current);
       if (debouncedValue === "") return;
-      const response = await fetch(`${SERVER_BASE_URL}/api/users/search`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer" + " " + accessToken,
-        },
-        body: JSON.stringify({
-          searchString: debouncedValue,
-        }),
-      });
 
-      const users = await response.json();
-      dispatch(updateChatters(users.users));
+      try {
+        const response = await fetch(`${SERVER_BASE_URL}/api/users/search`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: JSON.stringify({
+            searchString: debouncedValue,
+          }),
+        });
+
+        const users = await response.json();
+        console.log(users.users);
+        
+        startTransition(() => {
+          dispatch(updateChatters(users.users));
+        });
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
     }
+    
     fetchUsers();
-  }, [debouncedValue]);
+  }, [debouncedValue, dispatch, memoizedChatter, accessToken]);
 
   return (
     <div className="relative flex items-center rounded-lg px-2 sm:px-3 h-10 w-full bg-gray-200 my-3">
-      {/* <Icon name="Search" className="text-white px-2" /> */}
       <input
         type="search"
         name="searchString"
