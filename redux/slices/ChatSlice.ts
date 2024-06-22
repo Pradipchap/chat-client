@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import Vite from "../../src/assets/google.svg";
+import Vite from "../../src/assets/avatar.svg";
 interface CurrentChatInterface {
   primaryChatter: string;
   secondaryChatter: string;
@@ -42,7 +42,11 @@ const CHAT_SLICE = createSlice({
     },
     updateChatterDetails: (state, action) => {
       state.secondaryChatterName = action.payload.name;
-      state.secondaryChatterImage = action.payload.image;
+      console.log(typeof state.secondaryChatterImage);
+      console.log(typeof action.payload.image !== "undefined");
+      if (typeof action.payload.image !== "undefined") {
+        state.secondaryChatterImage = action.payload.image;
+      }
       state.secondaryChatter = action.payload.secondaryChatter;
     },
     updateSeenStatus: (state, action) => {

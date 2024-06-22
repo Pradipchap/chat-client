@@ -17,6 +17,7 @@ export interface MessageInterface {
   isReceiver: boolean;
   time: Date;
   id: string;
+  image?: string;
 }
 export interface ChatsDataInterface {
   page: number;
@@ -67,6 +68,7 @@ export interface LoginResult {
   username: string;
   userID: string;
   websocketId: string;
+  image: string;
 }
 
 export interface DetailsObjectInterface {

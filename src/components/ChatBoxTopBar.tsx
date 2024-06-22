@@ -17,7 +17,12 @@ export default function ChatBoxTopBar() {
   return (
     <div className="bg-gray-200 border-b border-gray-400 font-bold text-black h-14 w-full absolute top-0 flex justify-between items-center px-2">
       <p>{chatterName}</p>
-      <button onClick={handleCallOpen} className="px-3 py-2">
+      <button
+        onClick={handleCallOpen}
+        title="Call"
+        aria-label="Call Button"
+        className="px-3 py-2"
+      >
         <Icon name="Call" className=" hover:text-gray-700 text-xl" />
       </button>
     </div>

@@ -13,7 +13,8 @@ import useInfiniteScrolling from "../../customHooks/useInfiniteScrolling";
 import { SERVER_BASE_URL } from "../../utils/constants";
 import { ChatsDataInterface } from "../../interfaces/dataInterfaces";
 import Icon from "./Icon";
-import { updateChats } from "../../redux/slices/ChatSlice";
+import { updateChats, updateSeenStatus } from "../../redux/slices/ChatSlice";
+import ProfilePic from "./ProfilePic";
 
 export default function ChatMessageArea() {
   const currentChats = useAppSelector((state) => state.chat.chats);
@@ -22,10 +23,18 @@ export default function ChatMessageArea() {
   const params = useParams();
   const currentUser = useAppSelector((state) => state.currentUser);
   const secondaryChatter = params.chatterID;
+  const secondaryChatterImage = useAppSelector(
+    (state) => state.chat.secondaryChatterImage
+  );
   const [page, setPage] = useState(1);
   const DivRef = useRef<HTMLDivElement>(null);
   const spinnerRef = useRef<HTMLDivElement | null>(null);
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    setPage(1);
+  }, [secondaryChatter]);
+
   useInfiniteScrolling(spinnerRef, isLoading, () => {
     setPage((page) => page + 1);
   });
@@ -53,6 +62,11 @@ export default function ChatMessageArea() {
           throw "";
         }
         const chats: ChatsDataInterface = await response.json();
+        if (chats.messages.length === 0) {
+          if (spinnerRef.current) spinnerRef.current.hidden = true;
+          return;
+        }
+        dispatch(updateSeenStatus(chats.seen));
         const finalChats: {
           message: string;
           isReceiver: boolean;
@@ -69,19 +83,20 @@ export default function ChatMessageArea() {
         });
         const reversedChats = await finalChats.reverse();
         if (chats.page === 1) {
+          console.log(chats.page);
           // setCurrentChats(await reversedChats);
           dispatch(updateChats(await reversedChats));
         } else {
+          console.log(chats.page);
           dispatch(updateChats([...currentChats, ...reversedChats]));
-          // dispatch
         }
-      } catch (error) {
-        // setCurrentChats((state) => [...state]);
       } finally {
         setIsLoading(false);
       }
     }
-    if (currentUser.accessToken !== "" && secondaryChatter) getChats();
+    if (currentUser.accessToken !== "" && secondaryChatter) {
+      getChats();
+    }
   }, [currentUser, secondaryChatter, page]);
 
   return (
@@ -95,16 +110,16 @@ export default function ChatMessageArea() {
                 isReceiver={chat.isReceiver}
                 message={chat.message}
                 time={new Date()}
+                image={secondaryChatterImage}
               />
             </Fragment>
           );
         })}
-        {isSeen && (
-          <img
-            className="self-end text-gray-500 px-2"
-            height={12}
-            width={12}
-          ></img>
+        {isSeen && currentChats.at(-1)?.isReceiver && (
+          <ProfilePic
+            className="self-end text-gray-500 h-9 w-9 px-2"
+            image={secondaryChatterImage}
+          />
         )}
       </div>
 

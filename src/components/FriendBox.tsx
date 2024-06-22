@@ -22,6 +22,7 @@ import sendSocketMessage from "../../functions/sendSocketMessage";
 import { WsContext } from "../../utils/WsProvider";
 import useGetChatter from "../../customHooks/useGetChatter";
 import FriendBoxSkeleton from "./FriendBoxSkeleton";
+import ProfileImage from "../assets/avatar.svg";
 
 export default function FriendBox({ ...props }: ChatterInterface) {
   return (
@@ -39,7 +40,6 @@ function FriendBoxUI({
   datetime,
 }: ChatterInterface) {
   const wsClient = useContext(WsContext);
-
   const { userID: primaryChatter, accessToken } = useAppSelector(
     (state) => state.currentUser
   );
@@ -75,7 +75,6 @@ function FriendBoxUI({
           body: JSON.stringify({ requestID: chatterID }),
         });
         const result: ChatterDetailsInterface = await response.json();
-        console.log(result);
         setDetails(result);
         console.log(primaryChatter, result?.participantDetails._id);
         const probableChatterID = result?.participantDetails._id;
@@ -117,17 +116,6 @@ function FriendBoxUI({
   useLayoutEffect(() => {
     function handleMsgWhite() {
       console.log(isActive, message);
-      // if (message) {
-      //   if (!isActive) setIsMsgWhite(true);
-      //   else setIsMsgWhite(false);
-      //   return;
-      // } else {
-      //   if (details?.seen) {
-      //     setIsMsgWhite(false);
-      //   } else {
-      //     setIsMsgWhite(true);
-      //   }
-      // }
       if (isActive) {
         setIsMsgWhite(false);
       } else {
@@ -155,6 +143,7 @@ function FriendBoxUI({
   }
 
   function updateChatter() {
+    console.log(typeof details?.participantDetails.image);
     dispatch(
       updateChatterDetails({
         primaryChatter: primaryChatter,
@@ -163,9 +152,6 @@ function FriendBoxUI({
         image: details?.participantDetails.image,
       })
     );
-    // dispatch(updateChatterName(details?.participantDetails.username));
-    //console.log(primaryChatter, chatterID);
-    //console.log("updated");
   }
   return (
     <Link
@@ -175,14 +161,14 @@ function FriendBoxUI({
         isActive ? "bg-stone-900/20" : "hover:bg-gray-400/20"
       } px-2  rounded-lg flex items-center h-16 gap-3 mt-2 w-full`}
     >
-      <div className="relative w-12 h-12 bg-red-500 rounded-full">
-        {/* <img
-          src={image}
+      <div className="relative w-12 h-12  rounded-full">
+        <img
+          src={details?.participantDetails.image || ProfileImage}
           alt="user image"
           height={20}
           width={20}
           className="h-full w-full rounded-full"
-        /> */}
+        />
         {details?.isActive && (
           <div className="h-3.5 w-3.5 bg-green-600 rounded-full absolute bottom-[2%] right-[10%]" />
         )}

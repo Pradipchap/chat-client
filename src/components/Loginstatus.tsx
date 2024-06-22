@@ -1,6 +1,7 @@
 import { ButtonHTMLAttributes } from "react";
 import classNames from "../../utils/classNames";
 import { useAppSelector } from "../../utils/reduxHooks";
+import ProfilePic from "./ProfilePic";
 interface props extends ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string;
 }
@@ -23,7 +24,7 @@ export default function Loginstatus({ className, ...rest }: props) {
             width={50}
             className="h-10 w-10 rounded-full"
           /> */}
-          <div className="h-8 w-8 rounded-full bg-blue-700"></div>
+          <ProfilePic />
           <p>{session.username}</p>
         </>
       )}

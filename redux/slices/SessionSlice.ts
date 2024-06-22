@@ -29,6 +29,7 @@ const CURRENT_USER_SLICE = createSlice({
         state.email = action.payload.email;
         state.userID = action.payload.userID;
         state.websocketId = action.payload.websocketId;
+        state.image = action.payload.image;
       }
     },
   },
@@ -40,6 +41,7 @@ const CURRENT_USER_SLICE = createSlice({
         state.email = action.payload.email;
         state.userID = action.payload.userID;
         state.websocketId = action.payload.websocketId;
+        state.image = action.payload.image;
       }
     });
   },
