@@ -1,5 +1,5 @@
-import { useState } from "react";
-import StatusButton from "./StatusButton";
+import { lazy, useState } from "react";
+const StatusButton = lazy(() => import("./StatusButton"));
 import { SUBMIT_STATUS } from "../../utils/constants";
 import { Link } from "react-router-dom";
 

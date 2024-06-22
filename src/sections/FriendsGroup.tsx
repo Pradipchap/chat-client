@@ -1,5 +1,6 @@
+import { lazy } from "react";
 import { useAppSelector } from "../../utils/reduxHooks";
-import UserCard from "../components/UserCard";
+const UserCard = lazy(() => import("../components/UserCard"));
 
 export default function FriendsGroup() {
   const friends = useAppSelector((state) => state.users.Friends);
@@ -7,7 +8,7 @@ export default function FriendsGroup() {
     <div className="flex gap-5 p-2">
       {friends.length > 0 &&
         friends[0] !== null &&
-        friends.map(( user ) => {
+        friends.map((user) => {
           return (
             <UserCard
               username={user.username}

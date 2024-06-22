@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { lazy, useState } from "react";
 import { useAppSelector } from "../../utils/reduxHooks";
 import { SERVER_BASE_URL, SUBMIT_STATUS } from "../../utils/constants";
-import StatusButton from "./StatusButton";
+const StatusButton = lazy(() => import("./StatusButton"));
 
 interface props {
   userID?: string;
@@ -10,7 +10,7 @@ interface props {
   image?: string;
 }
 
-export default function SendRequestCard({ userID, username,email }: props) {
+export default function SendRequestCard({ userID, username, email }: props) {
   const currentUser = useAppSelector((state) => state.currentUser);
   const [requestStatus, setrequestStatus] = useState<SUBMIT_STATUS>(
     SUBMIT_STATUS.IDLE

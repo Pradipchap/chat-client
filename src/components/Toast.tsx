@@ -1,9 +1,8 @@
-
 import { useAppSelector } from "../../utils/reduxHooks";
-import useToast from "../../customHooks/useToast"
-import { useEffect } from "react";
+import useToast from "../../customHooks/useToast";
+import { lazy, useEffect } from "react";
 import { createPortal } from "react-dom";
-import Icon from "./Icon";
+const Icon = lazy(() => import("./Icon"));
 
 export default function Toast() {
   const isToastOpen = useAppSelector((state) => state.toast.isOpen);

@@ -1,6 +1,6 @@
-import OTP from "../components/Otp";
-import Button from "../components/Button";
-import { FormEvent } from "react";
+const OTP = lazy(() => import("../components/Otp"));
+const Button = lazy(() => import("../components/Button"));
+import { FormEvent, lazy } from "react";
 import useToast from "../../customHooks/useToast";
 import { useNavigate } from "react-router-dom";
 import getFormElementValues from "../../functions/getFormElementValues";
@@ -27,16 +27,13 @@ export default function EmailVerification({ email }: { email: string }) {
     const requestData = { email, code: Number(otp) };
 
     try {
-      const response = await fetch(
-        SERVER_BASE_URL + "/api/verifyemail",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(requestData),
-        }
-      );
+      const response = await fetch(SERVER_BASE_URL + "/api/verifyemail", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestData),
+      });
       if (await response.ok) {
         showSuccess("User successfully verified");
         navigate("/login");

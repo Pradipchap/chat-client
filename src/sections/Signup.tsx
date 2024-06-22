@@ -1,9 +1,9 @@
+import { FormEvent, lazy, useState } from "react";
+const Input = lazy(() => import("../components/Inputs/Input"));
+const Button = lazy(() => import("../components/Button"));
+const EmailVerification = lazy(() => import("./EmailVerification"));
 import GoogleLogo from "../assets/google.svg";
-import Input from "../components/Inputs/Input";
-import Button from "../components/Button";
-import { FormEvent, useState } from "react";
 import useToast from "../../customHooks/useToast";
-import EmailVerification from "./EmailVerification";
 import getFormElementValues from "../../functions/getFormElementValues";
 import { SERVER_BASE_URL } from "../../utils/constants";
 interface stepValues {
@@ -34,11 +34,11 @@ export default function Signup() {
     const requestData = {
       username,
       email,
-      password
+      password,
     };
 
     try {
-      const response = await fetch(SERVER_BASE_URL+ "/api/register", {
+      const response = await fetch(SERVER_BASE_URL + "/api/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -49,7 +49,7 @@ export default function Signup() {
         showSuccess("User successfully created");
         setStep({ step: 1, email: email });
       } else {
-        const output=await response.json()
+        const output = await response.json();
         showError(output.error.errorMessage);
       }
     } catch (error) {

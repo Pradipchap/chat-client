@@ -1,23 +1,23 @@
 import "./App.css";
-import Toast from "./components/Toast";
-import Login from "./sections/Login.tsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Signup from "./sections/Signup.tsx";
-import AuthenticatedRoute from "./AuthenticatedRoute.tsx";
 import { lazy, Suspense } from "react";
-import Friends from "./sections/Friends.tsx";
-import FriendsGroup from "./sections/FriendsGroup.tsx";
-import Loading from "./components/Loading.tsx";
-import UserProfile from "./sections/UserProfile.tsx";
-import { SERVER_BASE_URL } from "../utils/constants.ts";
-import Chat from "./components/ChatBox.tsx";
-import { useAppSelector } from "../utils/reduxHooks.ts";
-import Home from "./sections/Home.tsx";
+const Toast = lazy(() => import("./components/Toast"));
+const Login = lazy(() => import("./sections/Login.tsx"));
+const Signup = lazy(() => import("./sections/Signup.tsx"));
+const AuthenticatedRoute = lazy(() => import("./AuthenticatedRoute.tsx"));
+const Friends = lazy(() => import("./sections/Friends.tsx"));
+const FriendsGroup = lazy(() => import("./sections/FriendsGroup.tsx"));
+const Loading = lazy(() => import("./components/Loading.tsx"));
+const UserProfile = lazy(() => import("./sections/UserProfile.tsx"));
+const Chat = lazy(() => import("./components/ChatBox.tsx"));
+const Home = lazy(() => import("./sections/Home.tsx"));
 const AddFriends = lazy(async () => import(".//sections/AddFriends.tsx"));
 const FriendRequests = lazy(async () =>
   import("./sections/FriendRequests.tsx")
 );
 
+import { SERVER_BASE_URL } from "../utils/constants.ts";
+import { useAppSelector } from "../utils/reduxHooks.ts";
 function App() {
   const currentUser = useAppSelector((state) => state.currentUser);
 
@@ -32,7 +32,11 @@ function App() {
           children: [
             {
               path: ":chatterID",
-              element: <Chat />,
+              element: (
+                <Suspense fallback={null}>
+                  <Chat />
+                </Suspense>
+              ),
             },
           ],
         },

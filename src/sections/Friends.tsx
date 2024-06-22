@@ -1,17 +1,16 @@
 import { Outlet, useLocation } from "react-router-dom";
-
-import Loginstatus from "../components/Loginstatus";
-import SearchFriends from "../components/Inputs/SearchFriends";
 import { useAppDispatch, useAppSelector } from "../../utils/reduxHooks";
-import { useEffect, useState } from "react";
+import { useEffect, useState, lazy } from "react";
 import { SERVER_BASE_URL } from "../../utils/constants";
 import {
   updateFriendRequests,
   updateFriends,
   updateUsers,
 } from "../../redux/slices/UsersSlice";
-import Pagination from "../components/Pagination";
-import CustomLink from "../components/CustomLink";
+const Pagination = lazy(() => import("../components/Pagination"));
+const CustomLink = lazy(() => import("../components/CustomLink"));
+const Loginstatus = lazy(() => import("../components/Loginstatus"));
+const SearchFriends = lazy(() => import("../components/Inputs/SearchFriends"));
 
 function getUrlValue(url: string) {
   const strings = url.split("/");
@@ -29,7 +28,7 @@ export default function Friends() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    setTotalData(0)
+    setTotalData(0);
     setcurrentPath(getUrlValue(pathname.pathname));
   }, [pathname.pathname]);
 
@@ -96,9 +95,9 @@ export default function Friends() {
 }
 
 const NavigationItems = [
-  { name: "Friends", url: "friends",icon:"Users" },
-  { name: "Friend Requests", url: "friendRequests",icon:"FriendRequest" },
-  { name: "Add friends", url: "addFriends",icon:"Plus" },
+  { name: "Friends", url: "friends", icon: "Users" },
+  { name: "Friend Requests", url: "friendRequests", icon: "FriendRequest" },
+  { name: "Add friends", url: "addFriends", icon: "Plus" },
 ];
 function Navigation() {
   return (

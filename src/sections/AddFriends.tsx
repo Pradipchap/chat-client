@@ -1,5 +1,6 @@
+import { lazy } from "react";
 import { useAppSelector } from "../../utils/reduxHooks";
-import SendRequestCard from "../components/SendRequestCard";
+const SendRequestCard = lazy(() => import("../components/SendRequestCard"));
 
 export default function AddFriends() {
   const users = useAppSelector((state) => state.users.users);

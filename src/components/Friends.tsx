@@ -1,6 +1,7 @@
-import Search from "./Search";
-import FriendList from "./FriendList";
-import Setting from "./Setting";
+import { lazy } from "react";
+const Search = lazy(() => import("./Search"));
+const FriendList = lazy(() => import("./FriendList"));
+const Setting = lazy(() => import("./Setting"));
 import { Suspense } from "react";
 
 export default function Friends() {

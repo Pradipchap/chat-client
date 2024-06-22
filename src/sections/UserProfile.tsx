@@ -1,6 +1,6 @@
 import { useLoaderData } from "react-router-dom";
-import StatusButton from "../components/StatusButton";
-import { useState } from "react";
+const StatusButton = lazy(() => import("../components/StatusButton"));
+import { lazy, useState } from "react";
 import { SUBMIT_STATUS } from "../../utils/constants";
 import friendController from "../../functions/friendController";
 import { useAppSelector } from "../../utils/reduxHooks";
@@ -62,7 +62,7 @@ export default function UserProfile() {
     });
   }
 
-  function sendRequest(){
+  function sendRequest() {
     friendController({
       requestData: { friendID: userDetails._id },
       apiString: "/api/sendFriendRequest",

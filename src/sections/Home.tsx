@@ -1,5 +1,6 @@
+import { lazy } from "react";
 import { Outlet } from "react-router-dom";
-import Friends from "../components/Friends";
+const Friends = lazy(() => import("../components/Friends"));
 
 export default function Home() {
   return (

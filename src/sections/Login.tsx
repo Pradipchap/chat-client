@@ -1,7 +1,8 @@
+import { lazy } from "react";
 import GoogleLogo from "../assets/google.svg";
-import Input from "../components/Inputs/Input";
-import Checkbox from "../components/Inputs/Checkbox";
-import Button from "../components/Button";
+const Input = lazy(() => import("../components/Inputs/Input"));
+const Checkbox = lazy(() => import("../components/Inputs/Checkbox"));
+const Button = lazy(() => import("../components/Button"));
 import { FormEvent } from "react";
 import useToast from "../../customHooks/useToast";
 import { useNavigate } from "react-router-dom";

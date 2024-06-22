@@ -1,6 +1,13 @@
-import { Fragment, useEffect, useLayoutEffect, useRef, useState } from "react";
+import {
+  Fragment,
+  lazy,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { useAppDispatch, useAppSelector } from "../../utils/reduxHooks";
-import ChatMessage from "./ChatMessage";
+const ChatMessage = lazy(() => import("./ChatMessage"));
 import { useParams } from "react-router-dom";
 import useInfiniteScrolling from "../../customHooks/useInfiniteScrolling";
 import { SERVER_BASE_URL } from "../../utils/constants";

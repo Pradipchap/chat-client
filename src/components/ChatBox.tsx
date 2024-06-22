@@ -1,6 +1,7 @@
-import WriteMessage from "./WriteMessage";
-import ChatBoxTopBar from "./ChatBoxTopBar";
-import ChatMessageArea from "./ChatMessageArea";
+import { lazy } from "react";
+const ChatMessageArea = lazy(() => import("./ChatMessageArea"));
+const WriteMessage = lazy(() => import("./WriteMessage"));
+const ChatBoxTopBar = lazy(() => import("./ChatBoxTopBar"));
 
 export default function Chat() {
   return (

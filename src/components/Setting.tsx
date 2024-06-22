@@ -1,7 +1,8 @@
+import { lazy } from "react";
 import { useNavigate } from "react-router-dom";
-import Loginstatus from "./Loginstatus";
-import PopupOver from "./Popups/Popup";
-import Button from "./Button";
+const Loginstatus = lazy(() => import("./Loginstatus"));
+const PopupOver = lazy(() => import("./Popups/Popup"));
+const Button = lazy(() => import("./Button"));
 
 export default function Setting() {
   return (

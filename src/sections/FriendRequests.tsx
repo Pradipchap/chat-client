@@ -1,7 +1,7 @@
 import { useAppSelector } from "../../utils/reduxHooks";
 import { SERVER_BASE_URL, SUBMIT_STATUS } from "../../utils/constants";
-import { useState } from "react";
-import StatusButton from "../components/StatusButton";
+import { lazy, useState } from "react";
+const StatusButton = lazy(() => import("../components/StatusButton"));
 
 interface props {
   userID?: string;

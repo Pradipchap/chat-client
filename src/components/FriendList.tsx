@@ -7,7 +7,7 @@ import FriendBoxSkeleton from "./FriendBoxSkeleton";
 import useInfiniteScrolling from "../../customHooks/useInfiniteScrolling";
 import { lazy, startTransition, useEffect, useRef, useState } from "react";
 const FriendBox = lazy(() => import("./FriendBox.tsx"));
-import Icon from "./Icon";
+const Icon = lazy(() => import("./Icon.tsx"));
 import { SERVER_BASE_URL } from "../../utils/constants";
 import { pushChatters } from "../../redux/slices/UsersSlice";
 
