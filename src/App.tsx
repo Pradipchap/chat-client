@@ -1,6 +1,6 @@
 import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
 const Toast = lazy(() => import("./components/Toast"));
 const Login = lazy(() => import("./sections/Login.tsx"));
 const Signup = lazy(() => import("./sections/Signup.tsx"));
@@ -28,7 +28,12 @@ function App() {
       children: [
         {
           path: "/chat",
-          element: <Home />,
+          element: (
+            <Suspense fallback={null}>
+              {" "}
+              <Home />
+            </Suspense>
+          ),
           children: [
             {
               path: ":chatterID",
@@ -42,11 +47,19 @@ function App() {
         },
         {
           path: "/friends",
-          element: <Friends />,
+          element: (
+            <Suspense fallback={null}>
+              <Friends />
+            </Suspense>
+          ),
           children: [
             {
               path: "friends",
-              element: <FriendsGroup />,
+              element: (
+                <Suspense fallback={null}>
+                  <FriendsGroup />
+                </Suspense>
+              ),
             },
             {
               path: "addFriends",
@@ -90,9 +103,16 @@ function App() {
     },
     { path: "/register", element: <Signup /> },
   ]);
+
+  useEffect(() => {
+    console.log("first");
+  }, []);
+
   return (
     <>
-      <Toast />
+      <Suspense>
+        <Toast />
+      </Suspense>
       <RouterProvider router={router} />
     </>
   );

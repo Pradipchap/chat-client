@@ -11,6 +11,7 @@ import {
 import useDateDetails from "../../functions/useDateDetails";
 import {
   Suspense,
+  lazy,
   useContext,
   useEffect,
   useLayoutEffect,
@@ -21,7 +22,7 @@ import { SERVER_BASE_URL } from "../../utils/constants";
 import sendSocketMessage from "../../functions/sendSocketMessage";
 import { WsContext } from "../../utils/WsProvider";
 import useGetChatter from "../../customHooks/useGetChatter";
-import FriendBoxSkeleton from "./FriendBoxSkeleton";
+const FriendBoxSkeleton = lazy(() => import("./FriendBoxSkeleton"));
 import ProfileImage from "../assets/avatar.svg";
 
 export default function FriendBox({ ...props }: ChatterInterface) {

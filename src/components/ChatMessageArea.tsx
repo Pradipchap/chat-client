@@ -14,7 +14,7 @@ import { SERVER_BASE_URL } from "../../utils/constants";
 import { ChatsDataInterface } from "../../interfaces/dataInterfaces";
 import Icon from "./Icon";
 import { updateChats, updateSeenStatus } from "../../redux/slices/ChatSlice";
-import ProfilePic from "./ProfilePic";
+const ProfilePic = lazy(() => import("./ProfilePic"));
 
 export default function ChatMessageArea() {
   const currentChats = useAppSelector((state) => state.chat.chats);

@@ -34,7 +34,7 @@ export default function Login() {
         showSuccess("User successfully created");
         setCookie("chatAppDetails", JSON.stringify(result), 1);
         dispatch(fetchSessionData());
-        navigate("/");
+        navigate("/chat");
       } else {
         showError("user be registered");
       }

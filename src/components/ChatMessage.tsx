@@ -1,5 +1,6 @@
+import { lazy } from "react";
 import { MessageInterface } from "../../interfaces/dataInterfaces";
-import ProfilePic from "./ProfilePic";
+const ProfilePic = lazy(() => import("./ProfilePic"));
 
 export default function ChatMessage({
   message,

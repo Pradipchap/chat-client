@@ -17,7 +17,7 @@ interface dropdownProps {
 export default function PopupOver({
   children,
   content,
-  targetIndependent,
+  targetIndependent = false,
 }: dropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [position, setposition] = useState<{
@@ -27,6 +27,7 @@ export default function PopupOver({
 
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const popupRef = useRef<HTMLDivElement | null>(null);
+
   function setWidth() {
     if (targetIndependent) return {};
     else {
@@ -34,6 +35,7 @@ export default function PopupOver({
       return { width };
     }
   }
+
   function getPostition() {
     const x = buttonRef.current?.getBoundingClientRect().right;
     const y = buttonRef.current?.getBoundingClientRect().y;
@@ -103,12 +105,15 @@ export default function PopupOver({
 
   useEffect(
     () => {
+      if (!popupRef.current) {
+        return;
+      }
       const position = getPostition();
       setposition(position);
     },
 
     //eslint--next-line react-hooks/exhaustive-deps
-    [popupRef.current, isOpen]
+    [isOpen]
   );
 
   return (
@@ -119,8 +124,8 @@ export default function PopupOver({
           {...(children as ReactElement).props}
           onClick={() => {
             setIsOpen((isOpen) => !isOpen);
-            const pos = getPostition();
-            setposition(pos);
+            // const pos = getPostition();
+            // setposition(pos);
           }}
           className={(children as ReactElement).props.className}
         >

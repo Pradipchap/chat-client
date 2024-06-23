@@ -17,13 +17,6 @@ export default function Loginstatus({ className, ...rest }: props) {
     >
       {session.accessToken && (
         <>
-          {/* <img
-            src={session?.user?.image}
-            alt="user image"
-            height={50}
-            width={50}
-            className="h-10 w-10 rounded-full"
-          /> */}
           <ProfilePic />
           <p>{session.username}</p>
         </>
