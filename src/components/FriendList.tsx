@@ -71,7 +71,7 @@ export default function FriendList() {
     return (
       <div>
         {chatters.length === 0 ? (
-          <p>No users</p>
+          <p className="w-full text-center">No users</p>
         ) : (
           chatters.map((element: ChatterInterface) => {
             return <FriendBox key={element._id} {...element} />;

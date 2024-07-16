@@ -1,10 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import Vite from "../../src/assets/avatar.svg";
+import { UserRelation } from "../../interfaces/dataInterfaces";
 interface CurrentChatInterface {
   primaryChatter: string;
   secondaryChatter: string;
   secondaryChatterName: string;
   secondaryChatterImage: string;
+  secondaryChatterRelation: UserRelation;
   isSeen: boolean;
   chats: { message: string; isReceiver: boolean; time: Date; id: string }[];
 }
@@ -21,6 +23,7 @@ const CHAT_SLICE = createSlice({
     secondaryChatter: "",
     secondaryChatterName: "",
     secondaryChatterImage: Vite,
+    secondaryChatterRelation: "NORMAL",
     isSeen: false,
     chats: <
       { message: string; isReceiver: boolean; time: Date; id: string }[]
@@ -42,6 +45,8 @@ const CHAT_SLICE = createSlice({
     },
     updateChatterDetails: (state, action) => {
       state.secondaryChatterName = action.payload.name;
+      console.log(action.payload.relation);
+      state.secondaryChatterRelation = action.payload.relation;
       console.log(typeof state.secondaryChatterImage);
       console.log(typeof action.payload.image !== "undefined");
       if (typeof action.payload.image !== "undefined") {
@@ -57,6 +62,8 @@ const CHAT_SLICE = createSlice({
     builder.addCase(updateSecondaryChatter.fulfilled, (state, action) => {
       if (action.payload) {
         state.secondaryChatter = action.payload;
+        console.log("first");
+        // state.secondaryChatterRelation = "FRIEND";
       }
     });
   },

@@ -3,23 +3,25 @@ import { SUBMIT_STATUS } from "../../utils/constants";
 import classNames from "../../utils/classNames";
 
 function StatusButton({
-  requestStatus,
+  requestStatus = SUBMIT_STATUS.IDLE,
   successMessage = "Accepted",
   idleMessage = "Accept Request",
   failedMessage = "Not Accepted",
   loadingMessage = "Accepting",
-  onClick,
+  onClick = () => {},
   className = "",
   idleIcon = "Friend",
+  type = "submit",
 }: {
   successMessage?: string;
   idleMessage?: string;
   failedMessage?: string;
   loadingMessage?: string;
   requestStatus: SUBMIT_STATUS;
-  onClick: () => void;
+  onClick?: () => void;
   className?: string;
   idleIcon?: string;
+  type?: "submit" | "button" | "reset";
 }) {
   const data =
     requestStatus === SUBMIT_STATUS.LOADING
@@ -49,12 +51,12 @@ function StatusButton({
           iconClassName: "text-white",
           className: classNames("bg-blue-700", className),
         };
-
   return (
     <Button
       disabled={requestStatus != SUBMIT_STATUS.IDLE}
       icon={data.iconName}
       iconClassName={data.iconClassName}
+      type={type}
       className={classNames("gap-2 w-full min-w-44", data.className)}
       onClick={onClick}
     >

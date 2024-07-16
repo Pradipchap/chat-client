@@ -24,13 +24,12 @@ export interface ChatsDataInterface {
   seen: boolean;
   messages: { message: string; sender: string; _id: string; datetime: Date }[];
 }
+export type UserRelation = "FRIEND" | "GOTREQUEST" | "SENTREQUEST" | "NORMAL";
 
 export interface ChatterInterface {
   _id: string;
   chatterID: string;
-  isFriend?: boolean;
-  gotRequest?: boolean;
-  sentRequest?: boolean;
+  relation: UserRelation;
   message?: string;
   whoMessaged?: string;
   datetime?: string;
@@ -52,7 +51,6 @@ export interface ChatterDetailsInterface {
     _id: string;
     email: string;
     username: string;
-    websocketId: string;
     __v: number;
   };
 }
@@ -67,8 +65,11 @@ export interface LoginResult {
   email: string;
   username: string;
   userID: string;
-  websocketId: string;
+  phone: string;
   image: string;
+}
+export interface CookieInterface extends LoginResult {
+  expiresIn: string;
 }
 
 export interface DetailsObjectInterface {

@@ -45,6 +45,7 @@ export default function ChatMessageArea() {
 
   useEffect(() => {
     async function getChats() {
+      console.log("first");
       setIsLoading(true);
       try {
         const response = await fetch(`${SERVER_BASE_URL}/api/chats`, {
@@ -62,9 +63,10 @@ export default function ChatMessageArea() {
           throw "";
         }
         const chats: ChatsDataInterface = await response.json();
+        console.log(chats);
         if (chats.messages.length === 0) {
           if (spinnerRef.current) spinnerRef.current.hidden = true;
-          return;
+          if (page > 1) return;
         }
         dispatch(updateSeenStatus(chats.seen));
         const finalChats: {

@@ -8,7 +8,6 @@ export default function useInfiniteScrolling(
   useEffect(() => {
     const loaderElement = loaderRef.current;
     if (!loaderElement || isLoading) return;
-
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting && !isLoading) {

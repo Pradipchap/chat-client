@@ -1,4 +1,4 @@
-import { LoginResult } from "./../../interfaces/dataInterfaces";
+import { CookieInterface } from "./../../interfaces/dataInterfaces";
 import { PayloadAction, createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import getProjectCookieValue from "../../functions/getCookieValue";
 import { fetchChatters } from "./UsersSlice";
@@ -20,15 +20,18 @@ export const fetchSessionData = createAsyncThunk(
 
 const CURRENT_USER_SLICE = createSlice({
   name: "currentUser",
-  initialState: <LoginResult>{},
+  initialState: <CookieInterface>{},
   reducers: {
-    updateCurrentUser: (state, action: PayloadAction<LoginResult | null>) => {
+    updateCurrentUser: (
+      state,
+      action: PayloadAction<CookieInterface | null>
+    ) => {
       if (action.payload) {
         state.username = action.payload.username;
         state.accessToken = action.payload.accessToken;
         state.email = action.payload.email;
         state.userID = action.payload.userID;
-        state.websocketId = action.payload.websocketId;
+        state.expiresIn = action.payload.expiresIn;
         state.image = action.payload.image;
       }
     },
@@ -40,7 +43,7 @@ const CURRENT_USER_SLICE = createSlice({
         state.username = action.payload.username;
         state.email = action.payload.email;
         state.userID = action.payload.userID;
-        state.websocketId = action.payload.websocketId;
+        state.expiresIn = action.payload.expiresIn;
         state.image = action.payload.image;
       }
     });

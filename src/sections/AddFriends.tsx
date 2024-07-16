@@ -1,9 +1,12 @@
 import { lazy } from "react";
-import { useAppSelector } from "../../utils/reduxHooks";
+import useUsersFetch from "../../customHooks/useUsersFetch";
+import Pagination from "../components/Pagination";
 const SendRequestCard = lazy(() => import("../components/SendRequestCard"));
 
 export default function AddFriends() {
-  const users = useAppSelector((state) => state.users.users);
+  const { pageNo, users, setPageNo, totalData } = useUsersFetch({
+    currentPath: "addFriends",
+  });
   return (
     <div className="p-2">
       <div className="flex w-full gap-5">
@@ -19,6 +22,14 @@ export default function AddFriends() {
             );
           })}
       </div>
+      {totalData > 0 && (
+        <Pagination
+          currentPage={pageNo}
+          dataLength={totalData}
+          dataPerPage={10}
+          onPageChange={setPageNo}
+        />
+      )}
     </div>
   );
 }

@@ -23,12 +23,13 @@ import {
   faExclamation,
   faRightFromBracket,
   faBookOpen,
-  faPencilSquare,
   faPhone,
   faLeftLong,
   faGear,
   faMessage,
   faUserPlus,
+  faEdit,
+  faUserEdit,
 } from "@fortawesome/free-solid-svg-icons";
 import { faSpinner, faQuestion } from "@fortawesome/free-solid-svg-icons";
 import {
@@ -188,10 +189,17 @@ export default function Icon({ name, className = "" }: IconProps) {
           className={classNames("text-black text-lg", className)}
         />
       );
-    case "Edit":
+      case "Edit":
       return (
         <FontAwesomeIcon
-          icon={faPencilSquare}
+          icon={faEdit}
+          className={classNames("text-black text-lg", className)}
+        />
+      );
+    case "UserEdit":
+      return (
+        <FontAwesomeIcon
+          icon={faUserEdit}
           className={classNames("text-black text-lg", className)}
         />
       );

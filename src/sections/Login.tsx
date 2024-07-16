@@ -32,7 +32,7 @@ export default function Login() {
       const result = await response.json();
       if (await response.ok) {
         showSuccess("User successfully created");
-        setCookie("chatAppDetails", JSON.stringify(result), 1);
+        setCookie("chatAppDetails", result, 1);
         dispatch(fetchSessionData());
         navigate("/chat");
       } else {

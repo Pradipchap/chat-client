@@ -78,6 +78,7 @@ const USER_SLICE = createSlice({
           //console.log(element);
           state.chatters.splice(index, 1);
           state.chatters.splice(0, 0, {
+            relation: "FRIEND",
             _id: element._id,
             chatterID: element.chatterID,
             message,
@@ -128,6 +129,6 @@ export const {
   updateFriends,
   updateFriendRequests,
   updateLatestMessage,
-  pushChatters
+  pushChatters,
 } = USER_SLICE.actions;
 export default USER_SLICE.reducer;

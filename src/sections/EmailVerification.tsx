@@ -1,6 +1,6 @@
+import { FormEvent, lazy } from "react";
 const OTP = lazy(() => import("../components/Otp"));
 const Button = lazy(() => import("../components/Button"));
-import { FormEvent, lazy } from "react";
 import useToast from "../../customHooks/useToast";
 import { useNavigate } from "react-router-dom";
 import getFormElementValues from "../../functions/getFormElementValues";
@@ -8,6 +8,7 @@ import { SERVER_BASE_URL } from "../../utils/constants";
 
 export default function EmailVerification({ email }: { email: string }) {
   const { showError, showLoading, showSuccess } = useToast();
+  console.log("first");
   const navigate = useNavigate();
 
   async function EmailVerificationHandler(event: FormEvent<HTMLFormElement>) {

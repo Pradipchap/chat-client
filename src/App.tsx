@@ -1,11 +1,11 @@
 import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { lazy, Suspense, useEffect } from "react";
+import { lazy, Suspense } from "react";
 const Toast = lazy(() => import("./components/Toast"));
 const Login = lazy(() => import("./sections/Login.tsx"));
 const Signup = lazy(() => import("./sections/Signup.tsx"));
 const AuthenticatedRoute = lazy(() => import("./AuthenticatedRoute.tsx"));
-const Friends = lazy(() => import("./sections/Friends.tsx"));
+const Options = lazy(() => import("./sections/Options.tsx"));
 const FriendsGroup = lazy(() => import("./sections/FriendsGroup.tsx"));
 const Loading = lazy(() => import("./components/Loading.tsx"));
 const UserProfile = lazy(() => import("./sections/UserProfile.tsx"));
@@ -15,9 +15,10 @@ const AddFriends = lazy(async () => import(".//sections/AddFriends.tsx"));
 const FriendRequests = lazy(async () =>
   import("./sections/FriendRequests.tsx")
 );
-
+const Profile = lazy(() => import("./sections/Profile.tsx"));
 import { SERVER_BASE_URL } from "../utils/constants.ts";
 import { useAppSelector } from "../utils/reduxHooks.ts";
+
 function App() {
   const currentUser = useAppSelector((state) => state.currentUser);
 
@@ -46,10 +47,10 @@ function App() {
           ],
         },
         {
-          path: "/friends",
+          path: "/options",
           element: (
             <Suspense fallback={null}>
-              <Friends />
+              <Options />
             </Suspense>
           ),
           children: [
@@ -93,6 +94,14 @@ function App() {
                 );
               },
             },
+            {
+              path: "profile",
+              element: (
+                <Suspense fallback={null}>
+                  <Profile />
+                </Suspense>
+              ),
+            },
           ],
         },
       ],
@@ -103,10 +112,6 @@ function App() {
     },
     { path: "/register", element: <Signup /> },
   ]);
-
-  useEffect(() => {
-    console.log("first");
-  }, []);
 
   return (
     <>

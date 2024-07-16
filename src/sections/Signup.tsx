@@ -46,6 +46,7 @@ export default function Signup() {
         body: JSON.stringify(requestData),
       });
       if (await response.ok) {
+        console.log(email);
         showSuccess("User successfully created");
         setStep({ step: 1, email: email });
       } else {

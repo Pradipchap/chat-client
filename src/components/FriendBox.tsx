@@ -39,6 +39,7 @@ function FriendBoxUI({
   message,
   whoMessaged,
   datetime,
+  relation,
 }: ChatterInterface) {
   const wsClient = useContext(WsContext);
   const { userID: primaryChatter, accessToken } = useAppSelector(
@@ -67,7 +68,10 @@ function FriendBoxUI({
   useLayoutEffect(() => {
     async function getChatterDetails() {
       try {
-        const response = await fetch(`${SERVER_BASE_URL}/api/getChatter`, {
+        console.log(chatterID);
+        console.log(relation);
+        const apiEndPoint = relation === "FRIEND" ? "getChatter" : "notChatter";
+        const response = await fetch(`${SERVER_BASE_URL}/api/${apiEndPoint}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -77,13 +81,13 @@ function FriendBoxUI({
         });
         const result: ChatterDetailsInterface = await response.json();
         setDetails(result);
-        console.log(primaryChatter, result?.participantDetails._id);
         const probableChatterID = result?.participantDetails._id;
         if (secondaryChatterFromRedux === probableChatterID) {
           dispatch(
             updateChatterDetails({
               name: result?.participantDetails.username,
               image: result.participantDetails.image,
+              relation: relation,
             })
           );
           navigate(`/chat/${probableChatterID}`);
@@ -95,7 +99,7 @@ function FriendBoxUI({
           setIsMsgWhite(true);
         }
       } catch (error) {
-        //console.log(error);
+        console.log(error);
       }
     }
     getChatterDetails();
@@ -149,6 +153,7 @@ function FriendBoxUI({
       updateChatterDetails({
         primaryChatter: primaryChatter,
         secondaryChatter: chatterID,
+        relation: relation,
         name: details?.participantDetails.username,
         image: details?.participantDetails.image,
       })
