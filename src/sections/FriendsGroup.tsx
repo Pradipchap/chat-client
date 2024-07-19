@@ -15,6 +15,7 @@ export default function FriendsGroup() {
           friends.map((user) => {
             return (
               <UserCard
+                key={user._id}
                 username={user.username}
                 email={user.email}
                 userID={user._id}

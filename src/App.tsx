@@ -82,16 +82,17 @@ function App() {
               path: "userProfile/:userID",
               element: <UserProfile />,
               loader: async ({ request, params }) => {
-                return fetch(
-                  `${SERVER_BASE_URL}/api/user?userID=${params.userID}`,
-                  {
-                    method: "POST",
-                    headers: {
-                      Authorization: `Bearer ${currentUser.accessToken}`,
-                    },
-                    signal: request.signal,
-                  }
-                );
+                const requestID = params.userID;
+                return fetch(`${SERVER_BASE_URL}/api/user`, {
+                  method: "POST",
+                  body: JSON.stringify({ requestID }),
+                  headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${currentUser.accessToken}`,
+                  },
+
+                  signal: request.signal,
+                });
               },
             },
             {

@@ -4,7 +4,6 @@ function setCookie(
   cvalue: CookieInterface,
   exdays: number | string
 ) {
-  //console.log(exdays);
   const d = new Date();
   let expires = "";
   if (typeof exdays === "number") {

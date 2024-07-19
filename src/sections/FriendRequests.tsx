@@ -1,9 +1,10 @@
-import { useAppSelector } from "../../utils/reduxHooks";
+import { useAppDispatch, useAppSelector } from "../../utils/reduxHooks";
 import { SERVER_BASE_URL, SUBMIT_STATUS } from "../../utils/constants";
 import { lazy, useState } from "react";
 import Pagination from "../components/Pagination";
 const StatusButton = lazy(() => import("../components/StatusButton"));
 import useUsersFetch from "../../customHooks/useUsersFetch";
+import { pushChatters } from "../../redux/slices/UsersSlice";
 
 interface props {
   userID?: string;
@@ -28,6 +29,7 @@ export default function FriendRequests() {
           friendRequests.map((item) => {
             return (
               <SendRequestCard
+                key={item._id}
                 username={item.username}
                 email={item.email}
                 userID={item._id}
@@ -47,8 +49,9 @@ export default function FriendRequests() {
   );
 }
 
-function SendRequestCard({ userID, username }: props) {
+function SendRequestCard({ userID, username, email }: props) {
   const currentUser = useAppSelector((state) => state.currentUser);
+  const dispatch = useAppDispatch();
   const [requestStatus, setrequestStatus] = useState<SUBMIT_STATUS>(
     SUBMIT_STATUS.IDLE
   );
@@ -59,24 +62,33 @@ function SendRequestCard({ userID, username }: props) {
     try {
       const requestData = { requestID: userID };
       setrequestStatus(SUBMIT_STATUS.LOADING);
-      const response = await fetch(
-        SERVER_BASE_URL + "/api/confirmRequest?pageNo=",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer" + " " + currentUser.accessToken,
-          },
-          body: JSON.stringify(requestData),
-        }
-      );
-      //console.log("response", response);
+      const response = await fetch(SERVER_BASE_URL + "/api/confirmRequest", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer" + " " + currentUser.accessToken,
+        },
+        body: JSON.stringify(requestData),
+      });
       if (response.ok) {
         setrequestStatus(SUBMIT_STATUS.SUCCESS);
+        const convo = await response.json();
+        console.log(convo);
+        dispatch(
+          pushChatters({
+            username: username,
+            email: email,
+            _id: convo.convoID,
+            chatterID: userID,
+            relation: "FRIEND",
+          })
+        );
       } else {
-        throw new Error();
+        console.log("first");
+        throw "";
       }
     } catch (error) {
+      console.log(error);
       setrequestStatus(SUBMIT_STATUS.FAILED);
       setTimeout(() => {
         setrequestStatus(SUBMIT_STATUS.IDLE);

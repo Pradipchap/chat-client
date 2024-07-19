@@ -87,4 +87,5 @@ export interface DetailsObjectInterface {
     | "msgSeen";
   sender: string;
   receiver: string;
+  _id?:string
 }

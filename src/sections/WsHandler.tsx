@@ -11,7 +11,10 @@ import {
   updateChats,
   updateSeenStatus,
 } from "../../redux/slices/ChatSlice";
-import { updateLatestMessage } from "../../redux/slices/UsersSlice";
+import {
+  pushChatters,
+  updateLatestMessage,
+} from "../../redux/slices/UsersSlice";
 import { ChatsDataInterface } from "../../interfaces/dataInterfaces";
 import getSecondaryChatter from "../../customHooks/useGetChatter";
 
@@ -51,6 +54,14 @@ export default function WsHandler() {
                 pause();
               }
             }
+            console.log(details.sender)
+            dispatch(
+              pushChatters({
+                chatterID: details.sender,
+                _id: crypto.randomUUID(),
+                relation: "FRIEND",
+              })
+            );
             dispatch(
               updateLatestMessage({
                 message,
@@ -83,9 +94,6 @@ export default function WsHandler() {
           break;
         case "msgSeen":
           {
-            // console.log(details);
-            console.log(currentUser.username);
-            console.log("msg seen");
             dispatch(updateSeenStatus(true));
           }
           break;

@@ -6,7 +6,6 @@ function getFormElementValues(event: FormEvent<HTMLFormElement>) {
   for (const [key, value] of formData.entries()) {
     data[key] = value;
   }
-  //console.log(data);
   return data;
 }
 export default getFormElementValues;

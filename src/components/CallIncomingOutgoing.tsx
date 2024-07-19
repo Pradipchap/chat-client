@@ -24,7 +24,6 @@ export default function CallIncomingOutgoing({
 
   function rejectCall() {
     dispatch(endCall());
-    //console.log("daf", caller.secondaryChatter);
     sendSocketMessage({
       sender,
       receiver: caller.secondaryChatter,

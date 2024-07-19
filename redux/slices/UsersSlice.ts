@@ -46,10 +46,8 @@ export const fetchChatters = createAsyncThunk(
       });
       const results = await response.json();
       dispatch(updateSecondaryChatter(results.users[0].chatterID));
-      console.log(results.users);
       return results.users;
     } catch (error) {
-      //console.log(error);
       return [];
     }
   }
@@ -72,10 +70,11 @@ const USER_SLICE = createSlice({
     },
     updateLatestMessage: (state, action) => {
       const { messagerID, message, datetime, whoMessaged } = action.payload;
-      //console.log(messagerID, message);
       state.chatters.forEach((element, index) => {
         if (element.chatterID === messagerID) {
-          //console.log(element);
+          if (index === 0) {
+            return;
+          }
           state.chatters.splice(index, 1);
           state.chatters.splice(0, 0, {
             relation: "FRIEND",
@@ -85,6 +84,7 @@ const USER_SLICE = createSlice({
             whoMessaged,
             datetime,
           });
+          return;
         }
       });
     },
@@ -93,7 +93,22 @@ const USER_SLICE = createSlice({
       state.loading = false;
     },
     pushChatters: (state, action) => {
-      state.chatters = [...state.chatters, ...action.payload];
+      if (action.payload instanceof Array) {
+        state.chatters = [...action.payload, ...state.chatters];
+      } else {
+        const isPresent = state.chatters.some((item) => {
+          return item.chatterID === action.payload.chatterID;
+        });
+        if (!isPresent) state.chatters.unshift(action.payload);
+      }
+    },
+
+    pullChatters: (state, action) => {
+      state.chatters.filter((item, index) => {
+        if (item.chatterID === action.payload) {
+          state.chatters.splice(index);
+        }
+      });
     },
     updateFriends: (state, action) => {
       state.Friends = action.payload;
@@ -125,6 +140,7 @@ export const {
   updateUsers,
   setLoading,
   updateChatters,
+  pullChatters,
   setError,
   updateFriends,
   updateFriendRequests,

@@ -5,7 +5,6 @@ export default function useSound(url: string) {
   const audioRef = useRef(new Audio(url));
 
   function play() {
-    //console.log("as", audioRef.current);
     audioRef.current.play();
     setIsPlaying(true);
   }

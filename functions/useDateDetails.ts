@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react";
 import returnMonth from "../functions/getMonth";
 
-export default function useDateDetails(datetime: Date) {
+export default function useDateDetails(dateString: string) {
   const [timePassed, setTimePassed] = useState(getTime());
-  //console.log(datetime.toUTCString());
+
   function getTime() {
+    if (dateString === "") {
+      return "";
+    }
+    const datetime = new Date(dateString);
     const givenDateTime = datetime.getTime();
     const currentDateTime = new Date().getTime();
 
@@ -36,7 +40,7 @@ export default function useDateDetails(datetime: Date) {
 
   useEffect(() => {
     setTimePassed(getTime());
-  }, [datetime]);
+  }, [dateString]);
 
   useEffect(() => {
     const intervalId = setInterval(() => {

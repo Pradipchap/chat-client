@@ -30,7 +30,6 @@ export default function FriendList() {
       if (page <= 1) {
         return;
       }
-      console.log("first");
       try {
         setIsLoading(true);
         const response = await fetch(`${SERVER_BASE_URL}/api/chatters`, {
@@ -44,7 +43,6 @@ export default function FriendList() {
         const results: {
           users: ChatterDetailsInterface[];
         } = await response.json();
-        console.log(results.users);
         startTransition(() => {
           dispatch(pushChatters(results.users));
         });

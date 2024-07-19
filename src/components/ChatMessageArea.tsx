@@ -45,7 +45,6 @@ export default function ChatMessageArea() {
 
   useEffect(() => {
     async function getChats() {
-      console.log("first");
       setIsLoading(true);
       try {
         const response = await fetch(`${SERVER_BASE_URL}/api/chats`, {
@@ -63,7 +62,6 @@ export default function ChatMessageArea() {
           throw "";
         }
         const chats: ChatsDataInterface = await response.json();
-        console.log(chats);
         if (chats.messages.length === 0) {
           if (spinnerRef.current) spinnerRef.current.hidden = true;
           if (page > 1) return;
@@ -85,11 +83,9 @@ export default function ChatMessageArea() {
         });
         const reversedChats = await finalChats.reverse();
         if (chats.page === 1) {
-          console.log(chats.page);
           // setCurrentChats(await reversedChats);
           dispatch(updateChats(await reversedChats));
         } else {
-          console.log(chats.page);
           dispatch(updateChats([...currentChats, ...reversedChats]));
         }
       } finally {
@@ -104,6 +100,7 @@ export default function ChatMessageArea() {
   return (
     <div className="top-14 w-full h-[calc(100vh-120px)] bg-gray-200 flex flex-col-reverse gap-5 px-2 py-10 scroll-smooth overflow-y-auto">
       <div ref={DivRef} className="w-full h-max flex flex-col gap-5">
+        {currentChats.length === 0 && <p className="text-center">No messages</p>}
         {currentChats.map((chat) => {
           return (
             <Fragment key={chat.id}>

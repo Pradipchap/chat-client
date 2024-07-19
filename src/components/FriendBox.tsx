@@ -56,9 +56,7 @@ function FriendBoxUI({
     [secondaryChatter, details]
   );
   const timePassed = useDateDetails(
-    new Date(
-      datetime ? datetime : details?.latestMessage?.datetime || new Date()
-    )
+    datetime ? datetime : details?.latestMessage?.datetime || ""
   );
 
   const [isMsgWhite, setIsMsgWhite] = useState(false);
@@ -68,8 +66,6 @@ function FriendBoxUI({
   useLayoutEffect(() => {
     async function getChatterDetails() {
       try {
-        console.log(chatterID);
-        console.log(relation);
         const apiEndPoint = relation === "FRIEND" ? "getChatter" : "notChatter";
         const response = await fetch(`${SERVER_BASE_URL}/api/${apiEndPoint}`, {
           method: "POST",
@@ -120,17 +116,14 @@ function FriendBoxUI({
 
   useLayoutEffect(() => {
     function handleMsgWhite() {
-      console.log(isActive, message);
       if (isActive) {
         setIsMsgWhite(false);
       } else {
         if (typeof message !== "undefined") {
-          console.log("first");
           setIsMsgWhite(true);
           return;
         }
         if (whoMessaged === chatterID) {
-          console.log("ads");
           setIsMsgWhite(true);
           return;
         } else {
@@ -148,7 +141,6 @@ function FriendBoxUI({
   }
 
   function updateChatter() {
-    console.log(typeof details?.participantDetails.image);
     dispatch(
       updateChatterDetails({
         primaryChatter: primaryChatter,
@@ -193,17 +185,17 @@ function FriendBoxUI({
             <p className="text-[13px] max-w-32 truncate ">
               {whoMessaged === primaryChatter
                 ? "you"
-                : details?.participantDetails.username.slice(0, 5)}{" "}
+                : details?.participantDetails.username.split(" ")[0]}{" "}
               : {message}
             </p>
-          ) : (
+          ) : details?.latestMessage ? (
             <p className={`text-[13px] max-w-32 truncate`}>
               {details?.latestMessage?.sender === primaryChatter
                 ? "you"
-                : details?.participantDetails.username.slice(0, 5)}{" "}
+                : details?.participantDetails.username.split(" ")[0]}{" "}
               : {details?.latestMessage?.message}
             </p>
-          )}
+          ) : null}
           <p className="text-[10px]">{timePassed}</p>
         </div>
       </div>

@@ -9,7 +9,7 @@ interface props {
   email: string;
   image?: string;
 }
-export default function UserCard({ username, userID }: props) {
+export default function UserCard({ username, userID,email }: props) {
   //eslint-disable-next-line
   const [requestStatus] = useState<SUBMIT_STATUS>(SUBMIT_STATUS.IDLE);
   return (
@@ -21,12 +21,12 @@ export default function UserCard({ username, userID }: props) {
           alt="Bonnie image"
         />
         <Link
-          to={`/friends/userProfile/${userID}`}
+          to={`/options/userProfile/${userID}`}
           className="mb-1 text-xl font-medium text-gray-900"
         >
           {username}
         </Link>
-        <span className="text-sm text-gray-500">{userID}</span>
+        <span className="text-sm text-gray-500">{email}</span>
         <div className="flex mt-4 md:mt-6"></div>
         <div className="flex flex-col gap-2 w-full">
           <StatusButton

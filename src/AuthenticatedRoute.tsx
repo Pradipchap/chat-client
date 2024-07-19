@@ -9,7 +9,6 @@ export default function AuthenticatedRoute() {
     return <Navigate to="/login" />;
   } else {
     if (pathName.pathname === "/") {
-      console.log("first");
       return <Navigate to={"/chat"} />;
     } else return <Front />;
   }

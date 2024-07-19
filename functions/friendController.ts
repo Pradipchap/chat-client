@@ -13,7 +13,6 @@ async function friendController({
   setrequestStatus,
 }: props) {
   try {
-    console.log(apiString);
     setrequestStatus(SUBMIT_STATUS.LOADING);
     const response = await fetch(SERVER_BASE_URL + "/api" + apiString, {
       method: "POST",
@@ -23,9 +22,9 @@ async function friendController({
       },
       body: JSON.stringify(requestData),
     });
-    console.log("response", await response);
     if (response.ok) {
       setrequestStatus(SUBMIT_STATUS.SUCCESS);
+      return response.json();
     } else {
       throw new Error();
     }
@@ -34,6 +33,7 @@ async function friendController({
     setTimeout(() => {
       setrequestStatus(SUBMIT_STATUS.IDLE);
     }, 5000);
+    throw "";
   }
 }
 

@@ -34,7 +34,6 @@ const CHAT_SLICE = createSlice({
       state.secondaryChatter = action.payload.secondaryChatter;
     },
     updateChats: (state, action) => {
-      console.log(action.type);
       state.chats = action.payload;
     },
     pushChat: (state, action) => {
@@ -45,10 +44,7 @@ const CHAT_SLICE = createSlice({
     },
     updateChatterDetails: (state, action) => {
       state.secondaryChatterName = action.payload.name;
-      console.log(action.payload.relation);
       state.secondaryChatterRelation = action.payload.relation;
-      console.log(typeof state.secondaryChatterImage);
-      console.log(typeof action.payload.image !== "undefined");
       if (typeof action.payload.image !== "undefined") {
         state.secondaryChatterImage = action.payload.image;
       }
@@ -62,8 +58,6 @@ const CHAT_SLICE = createSlice({
     builder.addCase(updateSecondaryChatter.fulfilled, (state, action) => {
       if (action.payload) {
         state.secondaryChatter = action.payload;
-        console.log("first");
-        // state.secondaryChatterRelation = "FRIEND";
       }
     });
   },
