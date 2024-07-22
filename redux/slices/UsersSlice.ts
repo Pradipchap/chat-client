@@ -70,9 +70,19 @@ const USER_SLICE = createSlice({
     },
     updateLatestMessage: (state, action) => {
       const { messagerID, message, datetime, whoMessaged } = action.payload;
+      console.log(messagerID);
       state.chatters.forEach((element, index) => {
         if (element.chatterID === messagerID) {
           if (index === 0) {
+            console.log("first");
+            state.chatters[0] = {
+              relation: "FRIEND",
+              _id: element._id,
+              chatterID: element.chatterID,
+              message,
+              whoMessaged,
+              datetime,
+            };
             return;
           }
           state.chatters.splice(index, 1);

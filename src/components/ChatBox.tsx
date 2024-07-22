@@ -1,4 +1,4 @@
-import { lazy, useEffect } from "react";
+import { lazy } from "react";
 import { useAppSelector } from "../../utils/reduxHooks";
 import NonFriendsDetails from "./NonFriendsDetails";
 const ChatMessageArea = lazy(() => import("./ChatMessageArea"));
@@ -9,18 +9,22 @@ export default function Chat() {
   const relation = useAppSelector(
     (state) => state.chat.secondaryChatterRelation
   );
-
+  console.log(relation);
   return (
     <div className="relative bg-gray-200 min-h-screen flex-col flex justify-end">
       <ChatBoxTopBar />
-      {relation === "GOTREQUEST" || relation === "SENTREQUEST" ? (
-        <NonFriendsDetails />
-      ) : relation === "FRIEND" ? (
+      {relation === "FRIEND" ? (
         <>
           <ChatMessageArea />
           <WriteMessage />
         </>
-      ) : null}
+      ) : relation === "GOTREQUEST" ||
+        relation === "SENTREQUEST" ||
+        relation === "NORMAL" ? (
+        <NonFriendsDetails />
+      ) : (
+        <></>
+      )}
     </div>
   );
 }

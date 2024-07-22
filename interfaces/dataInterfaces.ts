@@ -24,7 +24,12 @@ export interface ChatsDataInterface {
   seen: boolean;
   messages: { message: string; sender: string; _id: string; datetime: Date }[];
 }
-export type UserRelation = "FRIEND" | "GOTREQUEST" | "SENTREQUEST" | "NORMAL";
+export type UserRelation =
+  | "FRIEND"
+  | "GOTREQUEST"
+  | "SENTREQUEST"
+  | "NORMAL"
+  | null;
 
 export interface ChatterInterface {
   _id: string;
@@ -87,5 +92,5 @@ export interface DetailsObjectInterface {
     | "msgSeen";
   sender: string;
   receiver: string;
-  _id?:string
+  _id?: string;
 }

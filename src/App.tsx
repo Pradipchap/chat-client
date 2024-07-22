@@ -16,11 +16,7 @@ const FriendRequests = lazy(async () =>
   import("./sections/FriendRequests.tsx")
 );
 const Profile = lazy(() => import("./sections/Profile.tsx"));
-import { SERVER_BASE_URL } from "../utils/constants.ts";
-import { useAppSelector } from "../utils/reduxHooks.ts";
-
 function App() {
-  const currentUser = useAppSelector((state) => state.currentUser);
 
   const router = createBrowserRouter([
     {
@@ -81,19 +77,6 @@ function App() {
             {
               path: "userProfile/:userID",
               element: <UserProfile />,
-              loader: async ({ request, params }) => {
-                const requestID = params.userID;
-                return fetch(`${SERVER_BASE_URL}/api/user`, {
-                  method: "POST",
-                  body: JSON.stringify({ requestID }),
-                  headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${currentUser.accessToken}`,
-                  },
-
-                  signal: request.signal,
-                });
-              },
             },
             {
               path: "profile",

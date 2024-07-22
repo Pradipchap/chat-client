@@ -88,6 +88,7 @@ function FriendBoxUI({
           );
           navigate(`/chat/${probableChatterID}`);
         }
+        console.log(await result?.seen);
         if (result?.seen) {
           setIsMsgWhite(false);
           dispatch(updateSeenStatus(true));

@@ -1,7 +1,7 @@
-import { lazy, useState } from "react";
-import { useLoaderData } from "react-router-dom";
+import { lazy, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 const StatusButton = lazy(() => import("../components/StatusButton"));
-import { SUBMIT_STATUS } from "../../utils/constants";
+import { SERVER_BASE_URL, SUBMIT_STATUS } from "../../utils/constants";
 import friendController from "../../functions/friendController";
 import { useAppDispatch, useAppSelector } from "../../utils/reduxHooks";
 import Button from "../components/Button";
@@ -20,21 +20,40 @@ interface ResponseData {
 }
 
 export default function UserProfile() {
-  console.log("asdadsasd");
-  const {
-    participantDetails,
-    relation = "FRIEND",
-  } = useLoaderData() as ResponseData;
-  console.log("user details is", participantDetails);
   const dispatch = useAppDispatch();
+  const params = useParams();
   const accessToken = useAppSelector((state) => state.currentUser.accessToken);
   const [first, setFirst] = useState(SUBMIT_STATUS.IDLE);
   const [second, setSecond] = useState(SUBMIT_STATUS.IDLE);
+  const [userData, setUserData] = useState<ResponseData | null>(null);
+
+  useEffect(() => {
+    async function getDetails() {
+      try {
+        const response = await fetch(`${SERVER_BASE_URL}/api/user`, {
+          method: "POST",
+          body: JSON.stringify({ requestID: params.userID }),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        if (!response.ok) {
+          throw "";
+        }
+        const initialRel = "FRIEND";
+        const { participantDetails } = (await response.json()) as ResponseData;
+        setUserData({ participantDetails, relation: initialRel });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    getDetails();
+  }, []);
 
   async function deleteFriendRequest() {
-    2;
     friendController({
-      requestData: { requestID: participantDetails._id },
+      requestData: { requestID: userData?.participantDetails._id },
       apiString: "/api/deleteRequest",
       setrequestStatus: setFirst,
       accessToken: accessToken,
@@ -43,7 +62,7 @@ export default function UserProfile() {
   async function acceptRequest() {
     try {
       const data = await friendController({
-        requestData: { requestID: participantDetails._id },
+        requestData: { requestID: userData?.participantDetails._id },
         apiString: "/confirmRequest",
         setrequestStatus: setSecond,
         accessToken: accessToken,
@@ -51,13 +70,19 @@ export default function UserProfile() {
       const convoID = await data.convoID;
       dispatch(
         pushChatters({
-          username: participantDetails.username,
-          email: participantDetails.email,
+          username: userData?.participantDetails.username,
+          email: userData?.participantDetails.email,
           _id: convoID,
-          chatterID: participantDetails._id,
+          chatterID: userData?.participantDetails._id,
           relation: "FRIEND",
         })
       );
+      if (userData?.participantDetails) {
+        setUserData({
+          participantDetails: userData.participantDetails,
+          relation: "FRIEND",
+        });
+      }
     } catch (error) {
       console.log(error);
     }
@@ -66,41 +91,74 @@ export default function UserProfile() {
   async function deleteFriend() {
     try {
       await friendController({
-        requestData: { friendID: participantDetails._id },
+        requestData: { friendID: userData?.participantDetails._id },
         apiString: "/deleteFriend",
         setrequestStatus: setFirst,
         accessToken: accessToken,
       });
-      dispatch(pullChatters(participantDetails._id));
+      dispatch(pullChatters(userData?.participantDetails._id));
+      if (userData?.participantDetails) {
+        await setUserData({
+          participantDetails:  userData.participantDetails,
+          relation: "NORMAL",
+        });
+      }
     } catch (error) {
       console.log(error);
     }
   }
   async function unsendRequest() {
-    friendController({
-      requestData: { requestID: participantDetails._id },
-      apiString: "/unsendRequest",
-      setrequestStatus: setFirst,
-      accessToken: accessToken,
-    });
+    try {
+      friendController({
+        requestData: { requestID: userData?.participantDetails._id },
+        apiString: "/unsendRequest",
+        setrequestStatus: setFirst,
+        accessToken: accessToken,
+      });
+      if (userData?.participantDetails) {
+        setUserData({
+          participantDetails: userData.participantDetails,
+          relation: "NORMAL",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async function sendRequest() {
-    friendController({
-      requestData: { friendID: participantDetails._id },
-      apiString: "/sendFriendRequest",
-      setrequestStatus: setFirst,
-      accessToken: accessToken,
-    });
+    try {
+      console.log(userData?.participantDetails._id);
+      await friendController({
+        requestData: { requestID: userData?.participantDetails._id },
+        apiString: "/sendFriendRequest",
+        setrequestStatus: setFirst,
+        accessToken: accessToken,
+      });
+      console.log("first");
+      if (userData?.participantDetails) {
+        console.log("ds");
+        setUserData({
+          participantDetails: userData.participantDetails,
+          relation: "SENTREQUEST",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
     <div className="h-full w-full flex flex-col items-center">
       <div className="h-44 w-44 bg-blue-600 rounded-full"></div>
-      <p className="text-2xl mt-2 font-bold">{participantDetails.username}</p>
-      <p className="text-sm mt-2 font-light">{participantDetails.email}</p>
+      <p className="text-2xl mt-2 font-bold">
+        {userData?.participantDetails.username}
+      </p>
+      <p className="text-sm mt-2 font-light">
+        {userData?.participantDetails.email}
+      </p>
       <div className="buttons flex gap-5 mt-5">
-        {relation === "GOTREQUEST" ? (
+        {userData?.relation === "GOTREQUEST" ? (
           <>
             <StatusButton
               onClick={deleteFriendRequest}
@@ -123,7 +181,7 @@ export default function UserProfile() {
               requestStatus={second}
             />
           </>
-        ) : relation === "SENTREQUEST" ? (
+        ) : userData?.relation === "SENTREQUEST" ? (
           <StatusButton
             onClick={unsendRequest}
             idleMessage="Unsend Request"
@@ -134,7 +192,7 @@ export default function UserProfile() {
             className="bg-red-600"
             requestStatus={first}
           />
-        ) : relation === "FRIEND" ? (
+        ) : userData?.relation === "FRIEND" ? (
           <>
             <Button
               icon="Message"
@@ -155,7 +213,7 @@ export default function UserProfile() {
               requestStatus={first}
             />
           </>
-        ) : (
+        ) : userData?.relation === "NORMAL" ? (
           <StatusButton
             onClick={sendRequest}
             idleMessage="Send Request"
@@ -165,7 +223,7 @@ export default function UserProfile() {
             idleIcon="Plus"
             requestStatus={first}
           />
-        )}
+        ) : null}
       </div>
     </div>
   );

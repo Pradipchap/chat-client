@@ -62,6 +62,7 @@ export default function WsHandler() {
                 relation: "FRIEND",
               })
             );
+            console.log("ooo")
             dispatch(
               updateLatestMessage({
                 message,

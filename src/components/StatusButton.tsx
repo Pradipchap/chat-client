@@ -8,6 +8,7 @@ function StatusButton({
   idleMessage = "Accept Request",
   failedMessage = "Not Accepted",
   loadingMessage = "Accepting",
+  idleClassName = "",
   onClick = () => {},
   className = "",
   idleIcon = "Friend",
@@ -21,6 +22,7 @@ function StatusButton({
   onClick?: () => void;
   className?: string;
   idleIcon?: string;
+  idleClassName?: string;
   type?: "submit" | "button" | "reset";
 }) {
   const data =
@@ -49,7 +51,7 @@ function StatusButton({
           iconName: idleIcon,
           name: idleMessage,
           iconClassName: "text-white",
-          className: classNames("bg-blue-700", className),
+          className: classNames("bg-blue-700", idleClassName),
         };
   return (
     <Button
@@ -57,7 +59,7 @@ function StatusButton({
       icon={data.iconName}
       iconClassName={data.iconClassName}
       type={type}
-      className={classNames("gap-2 w-full min-w-44", data.className)}
+      className={classNames("gap-2 w-full min-w-44", data.className, className)}
       onClick={onClick}
     >
       {data.name}

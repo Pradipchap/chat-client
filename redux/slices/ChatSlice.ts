@@ -23,7 +23,7 @@ const CHAT_SLICE = createSlice({
     secondaryChatter: "",
     secondaryChatterName: "",
     secondaryChatterImage: Vite,
-    secondaryChatterRelation: "NORMAL",
+    secondaryChatterRelation: null,
     isSeen: false,
     chats: <
       { message: string; isReceiver: boolean; time: Date; id: string }[]
@@ -53,6 +53,9 @@ const CHAT_SLICE = createSlice({
     updateSeenStatus: (state, action) => {
       state.isSeen = action.payload;
     },
+    updateRelation: (state, action) => {
+      state.secondaryChatterRelation = action.payload;
+    },
   },
   extraReducers(builder) {
     builder.addCase(updateSecondaryChatter.fulfilled, (state, action) => {
@@ -70,5 +73,6 @@ export const {
   pushMessage,
   updateChatterDetails,
   updateSeenStatus,
+  updateRelation,
 } = CHAT_SLICE.actions;
 export default CHAT_SLICE.reducer;
