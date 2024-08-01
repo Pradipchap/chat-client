@@ -72,7 +72,7 @@ export default function NonFriendsDetails() {
     }
   }
   return (
-    <div className="top-14 w-full h-[calc(100vh-120px)] bg-gray-200 flex flex-col items-center gap-5 px-2 py-10 scroll-smooth overflow-y-auto">
+    <div className="top-14 w-full h-[calc(100vh-120px)] flex flex-col items-center gap-5 px-2 py-10 scroll-smooth overflow-y-auto">
       <img
         src={secondaryChatter.secondaryChatterImage || StaticImg}
         className="h-40 w-40 rounded-full"

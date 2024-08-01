@@ -3,7 +3,7 @@ import {
   ChatterInterface,
 } from "../../interfaces/dataInterfaces";
 import { useAppDispatch, useAppSelector } from "../../utils/reduxHooks";
-import FriendBoxSkeleton from "./FriendBoxSkeleton";
+import FriendBoxSkeleton from "./Skeleton/FriendBoxSkeleton.tsx";
 import useInfiniteScrolling from "../../customHooks/useInfiniteScrolling";
 import { lazy, startTransition, useEffect, useRef, useState } from "react";
 const FriendBox = lazy(() => import("./FriendBox.tsx"));

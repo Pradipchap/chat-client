@@ -10,15 +10,11 @@ export default function Loginstatus({ className, ...rest }: props) {
   return (
     <button
       {...rest}
-      className={classNames(
-        "flex items-center gap-2 bg-red-500 px-4 py-2 text-gray-7--",
-        className
-      )}
+      className={classNames("flex items-center gap-2 w-full", className)}
     >
       {session.accessToken && (
         <>
-          <ProfilePic />
-          <p>{session.username}</p>
+          <ProfilePic className="h-10 w-auto" />
         </>
       )}
     </button>

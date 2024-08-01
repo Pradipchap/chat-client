@@ -9,9 +9,8 @@ export default function Chat() {
   const relation = useAppSelector(
     (state) => state.chat.secondaryChatterRelation
   );
-  console.log(relation);
   return (
-    <div className="relative bg-gray-200 min-h-screen flex-col flex justify-end">
+    <div className="relative min-h-screen max-h-screen flex-col flex justify-end items-start">
       <ChatBoxTopBar />
       {relation === "FRIEND" ? (
         <>

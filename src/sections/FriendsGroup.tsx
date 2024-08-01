@@ -8,8 +8,8 @@ export default function FriendsGroup() {
     currentPath: "friends",
   });
   return (
-    <div className="w-[80%] flex flex-col gap-10">
-      <div className="flex gap-5 p-2">
+    <div className="p-2 mt-10">
+      <div className="flex w-full gap-5">
         {friends.length > 0 &&
           friends[0] !== null &&
           friends.map((user) => {
@@ -23,13 +23,17 @@ export default function FriendsGroup() {
             );
           })}
       </div>
-      {totalData > 0 && (
+      {totalData > 0 ? (
         <Pagination
           currentPage={pageNo}
           dataLength={totalData}
           dataPerPage={10}
           onPageChange={setPageNo}
         />
+      ) : (
+        <div className="w-max m-auto text-lg font-medium">
+          Sorry , there are no friends <br /> <p>Please ,add friends to chat</p>{" "}
+        </div>
       )}
     </div>
   );

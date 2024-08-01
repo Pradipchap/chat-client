@@ -1,21 +1,26 @@
 import { FormEvent, lazy, useState } from "react";
 const Input = lazy(() => import("../components/Inputs/Input"));
-const Button = lazy(() => import("../components/Button"));
 const EmailVerification = lazy(() => import("./EmailVerification"));
 import GoogleLogo from "../assets/google.svg";
 import useToast from "../../customHooks/useToast";
 import getFormElementValues from "../../functions/getFormElementValues";
-import { SERVER_BASE_URL } from "../../utils/constants";
+import { SERVER_BASE_URL, SUBMIT_STATUS } from "../../utils/constants";
+import LoginIntroduction from "./LoginIntroduction";
+import StatusButton from "../components/StatusButton";
 interface stepValues {
   step: number;
   email: string;
 }
 export default function Signup() {
-  const { showError, showLoading, showSuccess } = useToast();
+  const { showError } = useToast();
   const [step, setStep] = useState<stepValues>({ step: 0, email: "" });
+  const [loginStatus, setLoginStatus] = useState<SUBMIT_STATUS>(
+    SUBMIT_STATUS.IDLE
+  );
 
   async function signUpHandler(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    setLoginStatus(SUBMIT_STATUS.LOADING);
     //console.log("first");
     const { username, email, password, confirmPassword } = getFormElementValues(
       event
@@ -30,7 +35,6 @@ export default function Signup() {
       showError("password must be same ");
       return;
     }
-    showLoading("loading");
     const requestData = {
       username,
       email,
@@ -46,26 +50,27 @@ export default function Signup() {
         body: JSON.stringify(requestData),
       });
       if (await response.ok) {
-        console.log(email);
-        showSuccess("User successfully created");
         setStep({ step: 1, email: email });
+        setLoginStatus(SUBMIT_STATUS.SUCCESS);
       } else {
-        const output = await response.json();
-        showError(output.error.errorMessage);
+        throw "";
       }
     } catch (error) {
       showError("user cannot be registered");
+      setLoginStatus(SUBMIT_STATUS.FAILED);
+    } finally {
+      setTimeout(() => {
+        setLoginStatus(SUBMIT_STATUS.IDLE);
+      }, 3000);
     }
   }
   return (
-    <div className="w-full min-h-screen h-full flex flex-none justify-center items-center p-5">
+    <div className="w-full min-h-screen h-full flex flex-none justify-center items-center px-5">
+      <LoginIntroduction />
       {step.step === 0 ? (
-        <div className="max-w-[400px] 2xl:max-w-[800px] w-full border-gray-100 border p-5 shadow-lg !bg-transparent flex flex-col gap-2 2xl:gap-7">
+        <div className="max-w-[500px] h-full flex-1 flex flex-col gap-2 2xl:gap-7">
           <p className="text-customBlue mb-1 text-3xl font-semibold">
             Register your account!
-          </p>
-          <p className="text-customInputText text-base font-normal">
-            Register to start using .
           </p>
           <form
             className="space-y-4 2xl:space-y-7 mt-6 flex flex-col"
@@ -103,12 +108,19 @@ export default function Signup() {
               placeholder="Enter your password"
               containerClassName="2xl:h-14 2xl text-lg"
             />
-            <Button type="submit" className="w-full text-lg">
-              Sign Up
-            </Button>
+            <StatusButton
+              successMessage="success"
+              idleMessage="Sign in"
+              idleIcon="Signin"
+              loadingMessage="signing in"
+              failedMessage="sign in failed"
+              requestStatus={loginStatus}
+              className="h-11 text-base"
+              type="submit"
+            />
             <button
               // onClick={() => signIn("google")}
-              className="w-full h-10 font-medium shadow-md hover:text-black border hover:border-customBlue rounded-[4px]"
+              className="w-full h-10 font-medium shadow-md hover:text-black border rounded-[4px]"
             >
               <div className="flex items-center justify-center">
                 <img
@@ -121,6 +133,14 @@ export default function Signup() {
                 Sign in with Google
               </div>
             </button>
+            <div className="flex items-center justify-center mt-6 gap-1">
+              <p className="text-subtext text-customInputText">
+                Already have an account?
+              </p>
+              <a href="/login" className="!text-customBlue">
+                Log in
+              </a>
+            </div>
           </form>
         </div>
       ) : (

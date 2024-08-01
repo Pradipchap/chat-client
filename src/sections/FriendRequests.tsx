@@ -22,7 +22,7 @@ export default function FriendRequests() {
   } = useUsersFetch({ currentPath: "friendRequests" });
 
   return (
-    <>
+    <div className="p-2 mt-10">
       <div className="flex gap-5 p-2">
         {friendRequests.length > 0 &&
           friendRequests[0] !== null &&
@@ -37,15 +37,20 @@ export default function FriendRequests() {
             );
           })}
       </div>
-      {totalData > 0 && (
+      {totalData > 0 ? (
         <Pagination
           currentPage={pageNo}
           dataLength={totalData}
           dataPerPage={10}
           onPageChange={setPageNo}
         />
+      ) : (
+        <div className="m-auto w-max text-lg font-medium">
+          Sorry , there are no friend requests <br />{" "}
+          <p>Please ,send requests</p>{" "}
+        </div>
       )}
-    </>
+    </div>
   );
 }
 

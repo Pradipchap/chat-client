@@ -15,7 +15,7 @@ export default function CustomLink(props:CustomLinkProp ) {
   } = props;
 
   const linkClasses = classNames(
-    "p-2 text-white bg-emerald-800 rounded-md px-3 w-fit hover:bg-opacity-90 transition-all ease-linear duration-300 text-sm flex items-center justify-center",
+    "p-2 text-black bg-emerald-800 rounded-md px-3 w-fit hover:bg-opacity-90 transition-all ease-linear duration-300 text-sm flex items-center justify-center",
     variant === "primary"
       ? "border-none"
       : "border-customBlue border text-gray-700 bg-transparent",

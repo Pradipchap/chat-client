@@ -28,10 +28,9 @@ export default function Search() {
       }
       return;
     }
-    
+
     async function fetchUsers() {
       x.current += 1;
-      console.log(x.current);
       if (debouncedValue === "") return;
 
       try {
@@ -47,8 +46,7 @@ export default function Search() {
         });
 
         const users = await response.json();
-        console.log(users.users);
-        
+        console.log(users);
         startTransition(() => {
           dispatch(updateChatters(users.users));
         });
@@ -56,18 +54,18 @@ export default function Search() {
         console.error("Error fetching users:", error);
       }
     }
-    
+
     fetchUsers();
   }, [debouncedValue, dispatch, memoizedChatter, accessToken]);
 
   return (
-    <div className="relative flex items-center rounded-lg px-2 sm:px-3 h-10 w-full bg-gray-200 my-3">
+    <div className="relative flex items-center rounded-lg h-12 w-full my-5">
       <input
         type="search"
         name="searchString"
         onChange={(e) => setInput(e.target.value)}
         id="search"
-        className="outline-none border placeholder:text-gray-600 border-gray-400 px-5 rounded-full h-full w-full text-gray-900 active:border bg-gray-200"
+        className="outline-none placeholder:text-gray-600 bg-gray-300 px-5 rounded-full h-full w-full text-gray-900 active:border"
         placeholder="Search"
       />
     </div>

@@ -6,15 +6,23 @@ import { fetchChatters } from "./UsersSlice";
 export const fetchSessionData = createAsyncThunk(
   "session",
   async (_, { dispatch }) => {
-    const loginResult = getProjectCookieValue();
-    if (loginResult) {
-      dispatch(
-        fetchChatters({
-          accessToken: loginResult?.accessToken,
-        })
-      );
+    try {
+      const loginResult = getProjectCookieValue();
+      if (!loginResult) {
+        throw "";
+      }
+      if (loginResult) {
+        dispatch(
+          fetchChatters({
+            accessToken: loginResult.accessToken,
+          })
+        );
+      }
+      console.log(loginResult)
+      return loginResult;
+    } catch (error) {
+      return null;
     }
-    return loginResult;
   }
 );
 
@@ -45,6 +53,7 @@ const CURRENT_USER_SLICE = createSlice({
         state.userID = action.payload.userID;
         state.expiresIn = action.payload.expiresIn;
         state.image = action.payload.image;
+        state.phone = action.payload.phone;
       }
     });
   },

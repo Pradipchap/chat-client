@@ -1,39 +1,21 @@
-// import { useAppSelector } from "../../utils/reduxHooks";
-// import ProfilePic from "../components/ProfilePic";
-
-// export default function Profile() {
-//   const { username, email, image } = useAppSelector(
-//     (state) => state.currentUser
-//   );
-//   return (
-//     <div className="flex flex-col gap-10 mt-10">
-//       <div className="h-full w-full flex flex-col items-center">
-//         <ProfilePic className="h-20 w-20" image={image} />
-//         <p className="text-2xl mt-2 font-bold">{username}</p>
-//         <p className="text-sm mt-2 font-light">{email}</p>
-//       </div>
-//     </div>
-//   );
-// }
-
 import ImageUpload from "../components/Inputs/ImageUpload";
 import useToast from "../../customHooks/useToast";
 import { SERVER_BASE_URL, SUBMIT_STATUS } from "../../utils/constants";
 import { FormEvent, useState } from "react";
-import { useAppSelector, useAppDispatch } from "../../utils/reduxHooks";
-import updateProfile from "../../functions/updateProfile";
-import { fetchSessionData } from "../../redux/slices/SessionSlice";
+import { useAppDispatch, useAppSelector } from "../../utils/reduxHooks";
 import StatusButton from "../components/StatusButton";
 import ProfilePic from "../components/ProfilePic";
 import Button from "../components/Button";
 import PopupOver from "../components/Popups/Popup";
 import Icon from "../components/Icon";
 import logoutHandler from "../../functions/logoutHandler";
+import updateProfile from "../../functions/updateProfile";
+import { fetchSessionData } from "../../redux/slices/SessionSlice";
 
 export default function Profile() {
   const session = useAppSelector((state) => state.currentUser);
   return (
-    <div className="relative px-2 mx-auto w-full flex flex-col items-center justify-center mt-10 gap-10">
+    <div className="relative px-5 mx-auto w-full flex flex-col items-center justify-center mt-14 gap-10">
       <PopupOver content={<EditProfilePopup />} targetIndependent>
         <button className="absolute right-2 top-0">
           <Icon
@@ -43,8 +25,8 @@ export default function Profile() {
         </button>
       </PopupOver>
       <ProfilePic image={session?.image || null} className="h-32 w-32" />
-      <div className="flex gap-5 flex-col md:flex-row w-full items-center justify-center">
-        <div className="flex-1 w-full flex-col flex gap-8">
+      <div className="flex gap-5 flex-col md:flex-row w-full items-center justify-center ">
+        <div className="w-[40%] flex-col flex gap-8 items-center justify-center">
           <div className="flex flex-col gap-1 w-full">
             <label htmlFor="name" className="  text-gray-500">
               Display Name
@@ -53,7 +35,7 @@ export default function Profile() {
               defaultValue={session.username || ""}
               name="name"
               disabled
-              className="px-0 bg-transparent border-b border-x-0 rounded-none border-t-0
+              className="px-0 bg-transparent rounded-none border-t-0
     "
             />
           </div>
@@ -65,7 +47,7 @@ export default function Profile() {
               defaultValue={session?.email || ""}
               name="email"
               disabled
-              className="outline-none px-0 bg-transparent border-b border-x-0 rounded-none border-t-0"
+              className="outline-none px-0 bg-transparent rounded-none border-t-0"
             />
           </div>
           <div className="flex flex-col gap-1 w-full ">
@@ -76,7 +58,7 @@ export default function Profile() {
               defaultValue={session?.phone || ""}
               name="phone"
               disabled
-              className="outline-none px-0 bg-transparent border-b border-x-0 rounded-none border-t-0"
+              className="outline-none px-0 bg-transparent rounded-none border-t-0"
             />
           </div>
           <div className="flex flex-col gap-1 w-full ">
@@ -88,12 +70,12 @@ export default function Profile() {
               name="dateofbirth"
               type="date"
               disabled
-              className="px-0 w-full self-start bg-transparent border-b border-x-0 rounded-none border-t-0
+              className="px-0 w-full self-start bg-transparent rounded-none border-t-0
     "
             />
           </div>
         </div>
-        <div className="flex-1 w-full flex-col flex gap-8">
+        <div className="W-[40%] flex flex-col gap-8 items-center justify-center">
           <div className="flex flex-col gap-1 w-full">
             <label htmlFor="name" className="text-gray-500">
               Language
@@ -103,7 +85,7 @@ export default function Profile() {
               defaultValue={"English"}
               name="name"
               disabled
-              className="px-0 bg-transparent border-b border-x-0 rounded-none border-t-0"
+              className="px-0 bg-transparent rounded-none border-t-0"
             />
           </div>
           <div className="flex flex-col gap-1 w-full">
@@ -115,7 +97,7 @@ export default function Profile() {
               defaultValue={"On"}
               name="email"
               disabled
-              className="outline-none px-0 bg-transparent border-b border-x-0 rounded-none border-t-0"
+              className="outline-none px-0 bg-transparent rounded-none border-t-0"
             />
           </div>
           <div className="flex flex-col gap-1 w-full ">
@@ -127,7 +109,7 @@ export default function Profile() {
               defaultValue={"On"}
               name="phone"
               disabled
-              className="outline-none px-0 bg-transparent border-b border-x-0 rounded-none border-t-0
+              className="outline-none px-0 bg-transparent rounded-none border-t-0
     "
             />
           </div>
@@ -159,6 +141,8 @@ function EditProfilePopup() {
     setProfileEditStatus(SUBMIT_STATUS.LOADING);
     try {
       const formData = new FormData(e.currentTarget);
+      formData.append("userID", session.userID);
+      console.log();
       const response = await fetch(`${SERVER_BASE_URL}/api/editProfile`, {
         method: "POST",
         headers: {
@@ -169,13 +153,15 @@ function EditProfilePopup() {
       if (!response.ok) {
         throw new Error("profile edit not successfull");
       }
+      const result = await response.json();
+      updateProfile(
+        await result.updatedProfile,
+        session.expiresIn,
+        session.accessToken
+      );
+      dispatch(fetchSessionData());
       setProfileEditStatus(SUBMIT_STATUS.SUCCESS);
-      // const data = await response.json();
-      // updateProfile(await data.profile, session.expiresIn, session.accessToken);
-      // dispatch(fetchSessionData());
-      // onclose();
     } catch (error) {
-      //console.error("Error updating profile:", error);
       setProfileEditStatus(SUBMIT_STATUS.FAILED);
       showError("profile edit unsuccessful");
       setTimeout(() => {
@@ -189,7 +175,7 @@ function EditProfilePopup() {
       onSubmit={handleSubmit}
       className="bg-white p-5 w-[450px] items-center justify-center flex flex-col gap-5"
     >
-      <p className="h-10 text-xl ">Edit Profile</p>
+      <p className="h-10 text-xl">Edit Profile</p>
       <ImageUpload
         defaultImage={session?.image || undefined}
         shape="circle"
@@ -202,7 +188,7 @@ function EditProfilePopup() {
         <input
           defaultValue={session.username || ""}
           name="name"
-          className="px-0 bg-transparent border-b border-x-0 rounded-none border-t-0
+          className="px-0 bg-transparent rounded-none border-t-0
     "
         />
       </div>
@@ -213,7 +199,7 @@ function EditProfilePopup() {
         <input
           defaultValue={session?.email || ""}
           name="email"
-          className="outline-none px-0 bg-transparent border-b border-x-0 rounded-none border-t-0
+          className="outline-none px-0 bg-transparent rounded-none border-t-0
     "
         />
       </div>
@@ -225,7 +211,7 @@ function EditProfilePopup() {
         <input
           defaultValue={session?.phone || ""}
           name="phone"
-          className="outline-none px-0 bg-transparent border-b border-x-0 rounded-none border-t-0
+          className="outline-none px-0 bg-transparent rounded-none border-t-0
     "
         />
       </div>
@@ -237,12 +223,16 @@ function EditProfilePopup() {
           defaultValue={new Date(new Date()).toISOString().substring(0, 10)}
           name="dateofbirth"
           type="date"
-          className="px-0 w-full self-start bg-transparent border-b border-x-0 rounded-none border-t-0
+          className="px-0 w-full self-start bg-transparent rounded-none border-t-0
     "
         />
       </div>
       <StatusButton
         type="submit"
+        idleMessage="Update"
+        loadingMessage="updating"
+        successMessage="failed to update"
+        failedMessage="failed"
         requestStatus={profileEditStatus}
         className="mt-5 transition-all"
       />

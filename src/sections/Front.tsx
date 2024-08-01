@@ -3,6 +3,7 @@ import { useEffect, useMemo } from "react";
 import { useAppSelector } from "../../utils/reduxHooks";
 import { Outlet } from "react-router-dom";
 import WsHandler from "./WsHandler";
+import Navigation from "./Optionsnavigation";
 
 export default function Front() {
   const audio = useMemo(() => new Audio(Ringtone), []);
@@ -27,9 +28,14 @@ export default function Front() {
   }, [callStatus, audio]);
 
   return (
-    <main>
+    <>
       <WsHandler />
-      <Outlet />
-    </main>
+      <main className="flex">
+        <Navigation />
+        <div className="flex-1">
+          <Outlet />
+        </div>
+      </main>
+    </>
   );
 }

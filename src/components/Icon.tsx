@@ -19,14 +19,12 @@ import {
   faLock,
   faLockOpen,
   faPenToSquare,
-  faPen,
   faExclamation,
   faRightFromBracket,
   faBookOpen,
   faPhone,
   faLeftLong,
   faGear,
-  faMessage,
   faUserPlus,
   faEdit,
   faUserEdit,
@@ -42,6 +40,7 @@ import {
   faTrashCan,
   faUser,
 } from "@fortawesome/free-regular-svg-icons";
+import { faMessage } from "@fortawesome/free-solid-svg-icons/faMessage";
 interface IconProps {
   name: string;
   className?: string;
@@ -189,7 +188,7 @@ export default function Icon({ name, className = "" }: IconProps) {
           className={classNames("text-black text-lg", className)}
         />
       );
-      case "Edit":
+    case "Edit":
       return (
         <FontAwesomeIcon
           icon={faEdit}
@@ -337,11 +336,6 @@ export default function Icon({ name, className = "" }: IconProps) {
         />
       );
     default:
-      return (
-        <FontAwesomeIcon
-          icon={faPen}
-          className={classNames("text-lg text-black", className)}
-        />
-      );
+      return null;
   }
 }

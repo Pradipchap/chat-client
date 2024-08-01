@@ -8,7 +8,7 @@ export default function AddFriends() {
     currentPath: "addFriends",
   });
   return (
-    <div className="p-2">
+    <div className="p-2 mt-10">
       <div className="flex w-full gap-5">
         {users?.length > 0 &&
           users.map((user) => {

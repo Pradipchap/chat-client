@@ -98,7 +98,7 @@ export default function ChatMessageArea() {
   }, [currentUser, secondaryChatter, page]);
 
   return (
-    <div className="top-14 w-full h-[calc(100vh-120px)] bg-gray-200 flex flex-col-reverse gap-5 px-2 py-10 scroll-smooth overflow-y-auto">
+    <div className="top-14 w-full h-[calc(100vh-120px)] flex flex-col-reverse gap-5 px-2 py-10 scroll-smooth overflow-y-auto">
       <div ref={DivRef} className="w-full h-max flex flex-col gap-5">
         {currentChats.length === 0 && <p className="text-center">No messages</p>}
         {currentChats.map((chat) => {

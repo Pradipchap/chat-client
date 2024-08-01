@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   ChatterDetailsInterface,
   ChatterInterface,
@@ -22,7 +22,7 @@ import { SERVER_BASE_URL } from "../../utils/constants";
 import sendSocketMessage from "../../functions/sendSocketMessage";
 import { WsContext } from "../../utils/WsProvider";
 import useGetChatter from "../../customHooks/useGetChatter";
-const FriendBoxSkeleton = lazy(() => import("./FriendBoxSkeleton"));
+const FriendBoxSkeleton = lazy(() => import("./Skeleton/FriendBoxSkeleton"));
 import ProfileImage from "../assets/avatar.svg";
 
 export default function FriendBox({ ...props }: ChatterInterface) {
@@ -59,7 +59,7 @@ function FriendBoxUI({
     datetime ? datetime : details?.latestMessage?.datetime || ""
   );
 
-  const [isMsgWhite, setIsMsgWhite] = useState(false);
+  const [isMsgRed, setisMsgRed] = useState(false);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -67,6 +67,7 @@ function FriendBoxUI({
     async function getChatterDetails() {
       try {
         const apiEndPoint = relation === "FRIEND" ? "getChatter" : "notChatter";
+        console.log(apiEndPoint)
         const response = await fetch(`${SERVER_BASE_URL}/api/${apiEndPoint}`, {
           method: "POST",
           headers: {
@@ -90,10 +91,12 @@ function FriendBoxUI({
         }
         console.log(await result?.seen);
         if (result?.seen) {
-          setIsMsgWhite(false);
+          setisMsgRed(false);
           dispatch(updateSeenStatus(true));
         } else {
-          setIsMsgWhite(true);
+          if (result.latestMessage?.sender === chatterID) {
+            setisMsgRed(true);
+          }
         }
       } catch (error) {
         console.log(error);
@@ -103,8 +106,8 @@ function FriendBoxUI({
   }, []);
 
   useEffect(() => {
-    if (wsClient instanceof WebSocket && isActive && isMsgWhite) {
-      setIsMsgWhite(false);
+    if (wsClient instanceof WebSocket && isActive && isMsgRed) {
+      setisMsgRed(false);
       sendSocketMessage({
         sender: primaryChatter,
         receiver: chatterID || "",
@@ -116,19 +119,20 @@ function FriendBoxUI({
   }, [isActive, message]);
 
   useLayoutEffect(() => {
+    console.log(message);
     function handleMsgWhite() {
       if (isActive) {
-        setIsMsgWhite(false);
+        setisMsgRed(false);
       } else {
         if (typeof message !== "undefined") {
-          setIsMsgWhite(true);
+          setisMsgRed(true);
           return;
         }
         if (whoMessaged === chatterID) {
-          setIsMsgWhite(true);
+          setisMsgRed(true);
           return;
         } else {
-          setIsMsgWhite(false);
+          setisMsgRed(false);
           return;
         }
       }
@@ -142,6 +146,8 @@ function FriendBoxUI({
   }
 
   function updateChatter() {
+    console.log(details?.participantDetails.image)
+    console.log(relation)
     dispatch(
       updateChatterDetails({
         primaryChatter: primaryChatter,
@@ -151,13 +157,13 @@ function FriendBoxUI({
         image: details?.participantDetails.image,
       })
     );
+    navigate(`/chat/${chatterID}`);
   }
   return (
-    <Link
-      to={`/chat/${chatterID}`}
+    <button
       onClick={updateChatter}
       className={`${
-        isActive ? "bg-stone-900/20" : "hover:bg-gray-400/20"
+        isActive ? "bg-gray-400/20" : "hover:bg-gray-500/20"
       } px-2  rounded-lg flex items-center h-16 gap-3 mt-2 w-full`}
     >
       <div className="relative w-12 h-12  rounded-full">
@@ -179,7 +185,7 @@ function FriendBoxUI({
         </p>
         <div
           className={`flex justify-between items-center gap-2 pt-1 ${
-            isMsgWhite ? "text-red-600 font-black" : "text-gray-700 font-normal"
+            isMsgRed ? "text-red-600 font-black" : "text-gray-700 font-normal"
           }`}
         >
           {message ? (
@@ -200,6 +206,6 @@ function FriendBoxUI({
           <p className="text-[10px]">{timePassed}</p>
         </div>
       </div>
-    </Link>
+    </button>
   );
 }

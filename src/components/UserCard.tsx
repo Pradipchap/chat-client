@@ -4,15 +4,18 @@ import { SUBMIT_STATUS } from "../../utils/constants";
 import { useNavigate } from "react-router-dom";
 import friendController from "../../functions/friendController";
 import { useAppDispatch, useAppSelector } from "../../utils/reduxHooks";
-import { pullChatters } from "../../redux/slices/UsersSlice";
+import { pullChatters, pushChatters } from "../../redux/slices/UsersSlice";
+import {
+  updateChatterDetails,
+} from "../../redux/slices/ChatSlice";
 
 interface props {
-  userID?: string;
+  userID: string;
   username: string;
   email: string;
   image?: string;
 }
-export default function UserCard({ username, userID, email }: props) {
+export default function UserCard({ username, userID, email, image }: props) {
   //eslint-disable-next-line
   const accessToken = useAppSelector((state) => state.currentUser.accessToken);
   const [requestStatus] = useState<SUBMIT_STATUS>(SUBMIT_STATUS.IDLE);
@@ -55,6 +58,23 @@ export default function UserCard({ username, userID, email }: props) {
             idleMessage="Message"
             requestStatus={requestStatus}
             onClick={() => {
+              dispatch(
+                pushChatters({
+                  username: username,
+                  email: email,
+                  _id: crypto.randomUUID(),
+                  chatterID: userID,
+                  relation: "FRIEND",
+                })
+              );
+              dispatch(
+                updateChatterDetails({
+                  name: username,
+                  image: image,
+                  relation: "FRIEND",
+                  secondaryChatter: userID,
+                })
+              );
               navigate(`/chat/${userID}`);
             }}
           />

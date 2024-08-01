@@ -8,3 +8,9 @@ export enum SUBMIT_STATUS {
   SUCCESS = "success",
   FAILED = "failed",
 }
+
+export const UserNavigationItems = [
+  { name: "Friends", url: "friends", icon: "Users" },
+  { name: "Friend Requests", url: "friendRequests", icon: "FriendRequest" },
+  { name: "Add friends", url: "addFriends", icon: "Plus" },
+];

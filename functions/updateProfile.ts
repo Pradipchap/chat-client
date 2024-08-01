@@ -15,5 +15,6 @@ export default function updateProfile(
     image: data.image,
     email: data.email,
   };
-  setCookie("blogit", updatedData, expiresIn);
+  console.log(updatedData)
+  setCookie("chatAppDetails", updatedData, expiresIn);
 }

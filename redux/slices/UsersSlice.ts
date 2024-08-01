@@ -85,6 +85,7 @@ const USER_SLICE = createSlice({
             };
             return;
           }
+          console.log(message)
           state.chatters.splice(index, 1);
           state.chatters.splice(0, 0, {
             relation: "FRIEND",

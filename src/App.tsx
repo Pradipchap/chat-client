@@ -5,9 +5,7 @@ const Toast = lazy(() => import("./components/Toast"));
 const Login = lazy(() => import("./sections/Login.tsx"));
 const Signup = lazy(() => import("./sections/Signup.tsx"));
 const AuthenticatedRoute = lazy(() => import("./AuthenticatedRoute.tsx"));
-const Options = lazy(() => import("./sections/Options.tsx"));
 const FriendsGroup = lazy(() => import("./sections/FriendsGroup.tsx"));
-const Loading = lazy(() => import("./components/Loading.tsx"));
 const UserProfile = lazy(() => import("./sections/UserProfile.tsx"));
 const Chat = lazy(() => import("./components/ChatBox.tsx"));
 const Home = lazy(() => import("./sections/Home.tsx"));
@@ -17,17 +15,19 @@ const FriendRequests = lazy(async () =>
 );
 const Profile = lazy(() => import("./sections/Profile.tsx"));
 function App() {
-
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <AuthenticatedRoute />,
+      element: (
+        <Suspense fallback={null}>
+          <AuthenticatedRoute />
+        </Suspense>
+      ),
       children: [
         {
           path: "/chat",
           element: (
             <Suspense fallback={null}>
-              {" "}
               <Home />
             </Suspense>
           ),
@@ -43,50 +43,40 @@ function App() {
           ],
         },
         {
-          path: "/options",
+          path: "profile",
           element: (
             <Suspense fallback={null}>
-              <Options />
+              <Profile />
             </Suspense>
           ),
-          children: [
-            {
-              path: "friends",
-              element: (
-                <Suspense fallback={null}>
-                  <FriendsGroup />
-                </Suspense>
-              ),
-            },
-            {
-              path: "addFriends",
-              element: (
-                <Suspense fallback={<Loading />}>
-                  <AddFriends />
-                </Suspense>
-              ),
-            },
-            {
-              path: "friendRequests",
-              element: (
-                <Suspense fallback={<Loading />}>
-                  <FriendRequests />
-                </Suspense>
-              ),
-            },
-            {
-              path: "userProfile/:userID",
-              element: <UserProfile />,
-            },
-            {
-              path: "profile",
-              element: (
-                <Suspense fallback={null}>
-                  <Profile />
-                </Suspense>
-              ),
-            },
-          ],
+        },
+        {
+          path: "friends",
+          element: (
+            <Suspense fallback={null}>
+              <FriendsGroup />
+            </Suspense>
+          ),
+        },
+        {
+          path: "addFriends",
+          element: (
+            <Suspense fallback={null}>
+              <AddFriends />
+            </Suspense>
+          ),
+        },
+        {
+          path: "friendRequests",
+          element: (
+            <Suspense fallback={null}>
+              <FriendRequests />
+            </Suspense>
+          ),
+        },
+        {
+          path: "userProfile/:userID",
+          element: <UserProfile />,
         },
       ],
     },
