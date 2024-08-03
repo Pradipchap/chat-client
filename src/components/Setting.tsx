@@ -1,6 +1,6 @@
 import { lazy } from "react";
 import Icon from "./Icon";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { UserNavigationItems } from "../../utils/constants";
 const Loginstatus = lazy(() => import("./Loginstatus"));
 
@@ -18,8 +18,8 @@ export default function Setting() {
     <div className="px-2 min-h-screen max-w-16 min-w-14 bg-gray-200/70 flex flex-col py-10 gap-5 border-t border-gray-300 justify-start items-center">
       {items.map((item, index) => {
         return (
-          <a
-            href={`/${item.link}`}
+          <Link
+            to={`/${item.link}`}
             key={item.link}
             className={` rounded-lg flex items-center justify-center w-full h-12 ${
               item.link === location || (index === 1 && isFriendsActive)
@@ -28,15 +28,15 @@ export default function Setting() {
             } `}
           >
             {item.children}
-          </a>
+          </Link>
         );
       })}
-      <a
-        href={`/profile`}
+      <Link
+        to={`/profile`}
         className={`rounded-lg mt-auto flex items-center justify-center w-full h-12`}
       >
         <Loginstatus className="rounded-full" />
-      </a>
+      </Link>
     </div>
   );
 }

@@ -9,13 +9,16 @@ interface props {
 
 export default function useUsersFetch({ currentPath }: props) {
   const [pageNo, setPageNo] = useState(1);
-  const [totalData, setTotalData] = useState(0);
+  const [loading, setLoading] = useState(false);
   const currentUser = useAppSelector((state) => state.currentUser);
-  // const friendRequests = useAppSelector((state) => state.users.FriendRequests);
-  const [users, setUsers] = useState<FriendBoxInterface[]>([]);
+  const [result, setResult] = useState<{
+    users: FriendBoxInterface[];
+    noOfUsers: number;
+  } | null>(null);
 
   useEffect(() => {
     async function getData() {
+      setLoading(true);
       try {
         const apiUrl =
           currentPath === `addFriends`
@@ -35,15 +38,16 @@ export default function useUsersFetch({ currentPath }: props) {
         );
         if (response.ok) {
           const data = await response.json();
-          setUsers(data.users);
-          setTotalData(data.noOfUsers);
+          setResult(data);
         }
       } catch (error) {
         //console.log(error);
+      } finally {
+        setLoading(false);
       }
     }
     getData();
   }, []);
 
-  return { users, totalData, setPageNo, pageNo };
+  return { result, loading, setPageNo, pageNo };
 }

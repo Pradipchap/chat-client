@@ -5,9 +5,7 @@ import { useNavigate } from "react-router-dom";
 import friendController from "../../functions/friendController";
 import { useAppDispatch, useAppSelector } from "../../utils/reduxHooks";
 import { pullChatters, pushChatters } from "../../redux/slices/UsersSlice";
-import {
-  updateChatterDetails,
-} from "../../redux/slices/ChatSlice";
+import { updateChatterDetails } from "../../redux/slices/ChatSlice";
 
 interface props {
   userID: string;
@@ -42,7 +40,7 @@ export default function UserCard({ username, userID, email, image }: props) {
     }
   }
   return (
-    <div className="w-full max-w-[250px] h-max p-3 bg-white border border-gray-200 rounded-lg shadow">
+    <div className="min-w-[250px] max-w-[300px] h-max p-3 bg-white border border-gray-200 rounded-lg shadow">
       <div className="flex flex-col items-center justify-between">
         <img
           className="w-24 h-24 mb-3 rounded-full shadow-lg"

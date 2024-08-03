@@ -5,6 +5,7 @@ import Pagination from "../components/Pagination";
 const StatusButton = lazy(() => import("../components/StatusButton"));
 import useUsersFetch from "../../customHooks/useUsersFetch";
 import { pushChatters } from "../../redux/slices/UsersSlice";
+import FriendsGroupSkeleton from "../components/Skeleton/FriendsGroupSkeleton";
 
 interface props {
   userID?: string;
@@ -14,16 +15,17 @@ interface props {
 }
 
 export default function FriendRequests() {
-  const {
-    pageNo,
-    users: friendRequests,
-    setPageNo,
-    totalData,
-  } = useUsersFetch({ currentPath: "friendRequests" });
+  const { pageNo, result, loading, setPageNo } = useUsersFetch({
+    currentPath: "friendRequests",
+  });
+  const friendRequests = result?.users || [];
+  const totalData = result?.noOfUsers || 0;
+
+  if (loading) return <FriendsGroupSkeleton />;
 
   return (
     <div className="p-2 mt-10">
-      <div className="flex gap-5 p-2">
+      <div className="flex gap-5 w-full">
         {friendRequests.length > 0 &&
           friendRequests[0] !== null &&
           friendRequests.map((item) => {

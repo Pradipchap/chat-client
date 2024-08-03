@@ -1,17 +1,21 @@
 import { lazy } from "react";
 import useUsersFetch from "../../customHooks/useUsersFetch";
 import Pagination from "../components/Pagination";
+import FriendsGroupSkeleton from "../components/Skeleton/FriendsGroupSkeleton";
 const UserCard = lazy(() => import("../components/UserCard"));
 
 export default function FriendsGroup() {
-  const { pageNo, users: friends, setPageNo, totalData } = useUsersFetch({
+  const { pageNo, result, loading, setPageNo } = useUsersFetch({
     currentPath: "friends",
   });
+  const friends = result?.users || [];
+  const totalData = result?.noOfUsers || 0;
+
+  if (loading) return <FriendsGroupSkeleton />;
   return (
     <div className="p-2 mt-10">
       <div className="flex w-full gap-5">
         {friends.length > 0 &&
-          friends[0] !== null &&
           friends.map((user) => {
             return (
               <UserCard
