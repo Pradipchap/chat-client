@@ -7,6 +7,9 @@ import getFormElementValues from "../../functions/getFormElementValues";
 import { SERVER_BASE_URL, SUBMIT_STATUS } from "../../utils/constants";
 import LoginIntroduction from "./LoginIntroduction";
 import StatusButton from "../components/StatusButton";
+import ChatImage from "../assets/loginImages/chat.png";
+import friendsImage from "../assets/loginImages/friends.png";
+
 interface stepValues {
   step: number;
   email: string;
@@ -66,7 +69,10 @@ export default function Signup() {
   }
   return (
     <div className="w-full min-h-screen h-full flex flex-none justify-center items-center px-5">
-      <LoginIntroduction />
+      <LoginIntroduction
+        primaryImage={ChatImage}
+        secondaryImage={friendsImage}
+      />
       {step.step === 0 ? (
         <div className="max-w-[500px] h-full flex-1 flex flex-col gap-2 2xl:gap-7">
           <p className="text-customBlue mb-1 text-3xl font-semibold">

@@ -49,7 +49,6 @@ export default function FriendRequests() {
       ) : (
         <div className="m-auto w-max text-lg font-medium">
           Sorry , there are no friend requests <br />{" "}
-          <p>Please ,send requests</p>{" "}
         </div>
       )}
     </div>

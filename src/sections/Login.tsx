@@ -12,6 +12,8 @@ import { fetchSessionData } from "../../redux/slices/SessionSlice";
 import setCookie from "../../functions/setCookie";
 import StatusButton from "../components/StatusButton";
 import LoginIntroduction from "./LoginIntroduction";
+import ProfileImage from "../assets/loginImages/profile.png";
+import RequestImage from "../assets/loginImages/request.png";
 
 export default function Login() {
   const dispatch = useAppDispatch();
@@ -53,7 +55,10 @@ export default function Login() {
 
   return (
     <div className="w-full min-h-screen h-full flex flex-none justify-center items-center p-5">
-      <LoginIntroduction />
+      <LoginIntroduction
+        primaryImage={ProfileImage}
+        secondaryImage={RequestImage}
+      />
       <div className="max-w-[400px] 2xl:max-w-[800px] flex-1 p-5 !bg-transparent flex flex-col gap-2 2xl:gap-7">
         <p className="text-customBlue mb-1 text-3xl font-semibold">Login</p>
         <form
