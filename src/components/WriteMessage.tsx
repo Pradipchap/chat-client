@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import sendSocketMessage from "../../functions/sendSocketMessage";
-import { pushMessage } from "../../redux/slices/ChatSlice";
+import { pushMessage, updateSeenStatus } from "../../redux/slices/ChatSlice";
 import { useAppDispatch, useAppSelector } from "../../utils/reduxHooks";
 import { updateLatestMessage } from "../../redux/slices/UsersSlice";
 import { useContext } from "react";
@@ -37,6 +37,7 @@ export default function WriteMessage() {
           data: nextBlob,
         });
         event.currentTarget.value = "";
+        dispatch(updateSeenStatus(false));
         dispatch(
           updateLatestMessage({
             message: text,

@@ -67,7 +67,7 @@ function FriendBoxUI({
     async function getChatterDetails() {
       try {
         const apiEndPoint = relation === "FRIEND" ? "getChatter" : "notChatter";
-        console.log(apiEndPoint)
+        console.log(apiEndPoint);
         const response = await fetch(`${SERVER_BASE_URL}/api/${apiEndPoint}`, {
           method: "POST",
           headers: {
@@ -146,8 +146,7 @@ function FriendBoxUI({
   }
 
   function updateChatter() {
-    console.log(details?.participantDetails.image)
-    console.log(relation)
+    navigate(`/chat/${chatterID}`);
     dispatch(
       updateChatterDetails({
         primaryChatter: primaryChatter,
@@ -157,7 +156,6 @@ function FriendBoxUI({
         image: details?.participantDetails.image,
       })
     );
-    navigate(`/chat/${chatterID}`);
   }
   return (
     <button
@@ -166,14 +164,21 @@ function FriendBoxUI({
         isActive ? "bg-gray-400/20" : "hover:bg-gray-500/20"
       } px-2  rounded-lg flex items-center h-16 gap-3 mt-2 w-full`}
     >
-      <div className="relative w-12 h-12  rounded-full">
-        <img
-          src={details?.participantDetails.image || ProfileImage}
-          alt="user image"
-          height={20}
-          width={20}
-          className="h-full w-full rounded-full"
-        />
+      <div className="relative w-12 h-12 bg-gray-100 rounded-full">
+        {details && (
+          <img
+            loading="eager"
+            src={
+              details?.participantDetails.image === ""
+                ? ProfileImage
+                : details.participantDetails.image
+            }
+            alt="user image"
+            height={20}
+            width={20}
+            className="h-full w-full rounded-full"
+          />
+        )}
         {details?.isActive && (
           <div className="h-3.5 w-3.5 bg-green-600 rounded-full absolute bottom-[2%] right-[10%]" />
         )}

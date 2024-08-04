@@ -1,12 +1,10 @@
 import { lazy } from "react";
 import { MessageInterface } from "../../interfaces/dataInterfaces";
+import { useAppSelector } from "../../utils/reduxHooks";
 const ProfilePic = lazy(() => import("./ProfilePic"));
 
-export default function ChatMessage({
-  message,
-  isReceiver,
-  image,
-}: MessageInterface) {
+export default function ChatMessage({ message, isReceiver }: MessageInterface) {
+  const image = useAppSelector((state) => state.chat.secondaryChatterImage);
   const rotation = isReceiver ? "-rotate-180" : "";
   const align = isReceiver ? "self-start" : "self-end flex-row-reverse";
   return (

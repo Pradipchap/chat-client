@@ -100,23 +100,28 @@ export default function ChatMessageArea() {
   return (
     <div className="top-14 w-full h-[calc(100vh-120px)] flex flex-col-reverse gap-5 px-2 py-10 scroll-smooth overflow-y-auto">
       <div ref={DivRef} className="w-full h-max flex flex-col gap-5">
-        {currentChats.length === 0 && <p className="text-center">No messages</p>}
-        {currentChats.map((chat) => {
-          return (
-            <Fragment key={chat.id}>
-              <ChatMessage
-                id={chat.id}
-                isReceiver={chat.isReceiver}
-                message={chat.message}
-                time={new Date()}
-                image={secondaryChatterImage}
-              />
-            </Fragment>
-          );
-        })}
-        {isSeen && currentChats.at(-1)?.isReceiver && (
+        {isLoading && page === 1 ? (
+          <p></p>
+        ) : currentChats.length === 0 && !isLoading ? (
+          <p className="text-center">No messages</p>
+        ) : (
+          currentChats.map((chat) => {
+            return (
+              <Fragment key={chat.id}>
+                <ChatMessage
+                  id={chat.id}
+                  isReceiver={chat.isReceiver}
+                  message={chat.message}
+                  time={new Date()}
+                  image={secondaryChatterImage}
+                />
+              </Fragment>
+            );
+          })
+        )}
+        {isSeen && !currentChats.at(-1)?.isReceiver && (
           <ProfilePic
-            className="self-end text-gray-500 h-9 w-9 px-2"
+            className="self-end text-gray-500 h-4 w-4"
             image={secondaryChatterImage}
           />
         )}
