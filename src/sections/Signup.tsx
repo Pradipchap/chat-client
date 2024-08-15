@@ -34,18 +34,17 @@ export default function Signup() {
       password: string;
       confirmPassword: string;
     };
-    //console.log(password, confirmPassword);
-    if (password !== confirmPassword) {
-      showError("password must be same ");
-      return;
-    }
-    const requestData = {
-      username,
-      email,
-      password,
-    };
-
     try {
+      //console.log(password, confirmPassword);
+      if (password !== confirmPassword) {
+        throw { error: { message: "password must be same" } };
+      }
+      const requestData = {
+        username,
+        email,
+        password,
+      };
+
       const response = await fetch(SERVER_BASE_URL + "/api/register", {
         method: "POST",
         headers: {
