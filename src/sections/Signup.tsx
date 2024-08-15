@@ -9,6 +9,7 @@ import LoginIntroduction from "./LoginIntroduction";
 import StatusButton from "../components/StatusButton";
 import ChatImage from "../assets/loginImages/chat.png";
 import friendsImage from "../assets/loginImages/friends.png";
+import { ErrorInterface } from "../../interfaces/dataInterfaces";
 
 interface stepValues {
   step: number;
@@ -52,14 +53,16 @@ export default function Signup() {
         },
         body: JSON.stringify(requestData),
       });
+      const result = await response.json();
       if (await response.ok) {
         setStep({ step: 1, email: email });
         setLoginStatus(SUBMIT_STATUS.SUCCESS);
       } else {
-        throw "";
+        throw result;
       }
     } catch (error) {
-      showError("user cannot be registered");
+      const errorObj = error as ErrorInterface;
+      showError(errorObj.error.message || "user cannot be registered");
       setLoginStatus(SUBMIT_STATUS.FAILED);
     } finally {
       setTimeout(() => {

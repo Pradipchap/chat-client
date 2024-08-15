@@ -51,7 +51,7 @@ export default function Login() {
       setTimeout(() => {
         setLoginStatus(SUBMIT_STATUS.IDLE);
       }, 3000);
-      showError(errorObj.error.message || "user cannot be registered");
+      showError(errorObj.error.message || "user cannot be logged in");
     }
   }
 
