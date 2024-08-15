@@ -94,3 +94,10 @@ export interface DetailsObjectInterface {
   receiver: string;
   _id?: string;
 }
+
+export interface ErrorInterface {
+  error: {
+    message: string;
+    code: number;
+  };
+}

@@ -14,6 +14,7 @@ import StatusButton from "../components/StatusButton";
 import LoginIntroduction from "./LoginIntroduction";
 import ProfileImage from "../assets/loginImages/profile.png";
 import RequestImage from "../assets/loginImages/request.png";
+import { ErrorInterface } from "../../interfaces/dataInterfaces";
 
 export default function Login() {
   const dispatch = useAppDispatch();
@@ -42,14 +43,15 @@ export default function Login() {
         setLoginStatus(SUBMIT_STATUS.SUCCESS);
         navigate("/chat");
       } else {
-        throw "";
+        throw result;
       }
     } catch (error) {
+      const errorObj = error as ErrorInterface;
       setLoginStatus(SUBMIT_STATUS.FAILED);
       setTimeout(() => {
         setLoginStatus(SUBMIT_STATUS.IDLE);
       }, 3000);
-      showError("user cannot be registered");
+      showError(errorObj.error.message || "user cannot be registered");
     }
   }
 
