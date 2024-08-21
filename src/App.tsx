@@ -1,6 +1,8 @@
 import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { lazy, Suspense } from "react";
+import WsProvider from "../utils/WsProvider.tsx";
+import CallArea from "./sections/CallArea.tsx";
 const Toast = lazy(() => import("./components/Toast"));
 const Login = lazy(() => import("./sections/Login.tsx"));
 const Signup = lazy(() => import("./sections/Signup.tsx"));
@@ -19,9 +21,11 @@ function App() {
     {
       path: "/",
       element: (
-        <Suspense fallback={null}>
-          <AuthenticatedRoute />
-        </Suspense>
+        <WsProvider>
+          <Suspense fallback={null}>
+            <AuthenticatedRoute />
+          </Suspense>
+        </WsProvider>
       ),
       children: [
         {
@@ -80,6 +84,7 @@ function App() {
         },
       ],
     },
+    { path: "/call", element: <CallArea /> },
     {
       path: "/login",
       element: <Login />,

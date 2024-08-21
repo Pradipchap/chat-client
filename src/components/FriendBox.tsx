@@ -83,13 +83,13 @@ function FriendBoxUI({
           dispatch(
             updateChatterDetails({
               name: result?.participantDetails.username,
+              secondaryChatter: result.participantDetails._id,
               image: result.participantDetails.image,
               relation: relation,
             })
           );
           navigate(`/chat/${probableChatterID}`);
         }
-        console.log(await result?.seen);
         if (result?.seen) {
           setisMsgRed(false);
           dispatch(updateSeenStatus(true));

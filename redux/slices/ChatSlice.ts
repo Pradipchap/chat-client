@@ -13,6 +13,7 @@ interface CurrentChatInterface {
 export const updateSecondaryChatter = createAsyncThunk(
   "secondaryChatter",
   async (secondaryChatter: string) => {
+    console.log(secondaryChatter);
     return secondaryChatter;
   }
 );

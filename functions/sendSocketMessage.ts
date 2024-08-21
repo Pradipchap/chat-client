@@ -15,10 +15,16 @@ interface args {
     | "msgSeen"
     | "conClos";
   wsClient: WebSocket | null;
-  data: Blob;
+  data?: Blob;
 }
 
-function sendSocketMessage({ sender, receiver, type, wsClient, data }: args) {
+function sendSocketMessage({
+  sender,
+  receiver,
+  type,
+  wsClient,
+  data = new Blob([]),
+}: args) {
   const detailsBlob = new Blob([
     JSON.stringify({
       type,
