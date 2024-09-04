@@ -231,7 +231,7 @@ function EditProfilePopup() {
         type="submit"
         idleMessage="Update"
         loadingMessage="updating"
-        successMessage="failed to update"
+        successMessage="update successfully"
         failedMessage="failed"
         requestStatus={profileEditStatus}
         className="mt-5 transition-all"
