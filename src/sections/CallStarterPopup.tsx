@@ -8,12 +8,9 @@ import { useContext, useEffect, useState } from "react";
 import { WsContext } from "../../utils/WsProvider";
 import setCallSession from "../../functions/setCallSession";
 import deleteCallSession from "../../functions/deleteCallSession";
-import usePeer from "../../customHooks/usePeer";
-import { PeerContext } from "../../utils/PeerProvider";
 
 export default function CallStarterPopup() {
   const wsClient = useContext(WsContext);
-  const Peer = useContext(PeerContext);
   const dispatch = useAppDispatch();
   const callDetails = useAppSelector((state) => state.call);
   const userDetails = useAppSelector((state) => state.currentUser);
@@ -89,7 +86,9 @@ export default function CallStarterPopup() {
     }
     window.addEventListener("storage", handleStorageChange);
     return () => window.removeEventListener("storage", handleStorageChange);
-  }, [callDetails, userDetails]);
+  },
+  //eslint-disable-next-line
+  [callDetails, userDetails]);
 
   function acceptCallHandler() {
     dispatch(startCall());

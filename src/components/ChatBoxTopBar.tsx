@@ -4,7 +4,6 @@ import { requestCall } from "../../redux/slices/CallSlice";
 import { useAppDispatch, useAppSelector } from "../../utils/reduxHooks";
 import { WsContext } from "../../utils/WsProvider";
 import Icon from "./Icon";
-import { SERVER_BASE_URL } from "../../utils/constants";
 
 export default function ChatBoxTopBar() {
   const dispatch = useAppDispatch();
