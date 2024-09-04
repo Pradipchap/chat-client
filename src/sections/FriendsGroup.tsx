@@ -14,7 +14,7 @@ export default function FriendsGroup() {
   if (loading) return <FriendsGroupSkeleton />;
   return (
     <div className="p-2 mt-10">
-      <div className="flex w-full gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 w-full gap-5">
         {friends.length > 0 &&
           friends.map((user) => {
             return (
@@ -23,6 +23,7 @@ export default function FriendsGroup() {
                 username={user.username}
                 email={user.email}
                 userID={user._id}
+                image={user.image}
               />
             );
           })}

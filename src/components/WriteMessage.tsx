@@ -21,7 +21,7 @@ export default function WriteMessage() {
         primaryChatter === "" ||
         secondaryChatter === ""
       ) {
-        //console.log(false,secondaryChatter);
+        ////console.log(false,secondaryChatter);
         return;
       }
       if (event.currentTarget.value.length < 1) return;
@@ -47,7 +47,7 @@ export default function WriteMessage() {
           })
         );
       } catch (error) {
-        //console.log("error is ", error);
+        ////console.log("error is ", error);
       }
     } else {
       return;

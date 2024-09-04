@@ -45,7 +45,7 @@ export default function UserProfile() {
         const { participantDetails } = (await response.json()) as ResponseData;
         setUserData({ participantDetails, relation: initialRel });
       } catch (error) {
-        console.log(error);
+        //console.log(error);
       }
     }
     getDetails();
@@ -84,7 +84,7 @@ export default function UserProfile() {
         });
       }
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   }
 
@@ -104,7 +104,7 @@ export default function UserProfile() {
         });
       }
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   }
   async function unsendRequest() {
@@ -122,29 +122,29 @@ export default function UserProfile() {
         });
       }
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   }
 
   async function sendRequest() {
     try {
-      console.log(userData?.participantDetails._id);
+      //console.log(userData?.participantDetails._id);
       await friendController({
         requestData: { requestID: userData?.participantDetails._id },
         apiString: "/sendFriendRequest",
         setrequestStatus: setFirst,
         accessToken: accessToken,
       });
-      console.log("first");
+      //console.log("first");
       if (userData?.participantDetails) {
-        console.log("ds");
+        //console.log("ds");
         setUserData({
           participantDetails: userData.participantDetails,
           relation: "SENTREQUEST",
         });
       }
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   }
 

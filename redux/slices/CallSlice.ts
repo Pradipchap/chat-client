@@ -13,6 +13,7 @@ interface callDetailsInterface {
   primaryChatter: string;
   secondaryChatter: string;
   secondaryChatterName: string;
+  peerId: string;
   tab: Window | null;
   secondaryChatterImage: string;
 }
@@ -24,6 +25,7 @@ const CALL_SLICE = createSlice({
     secondaryChatter: "",
     secondaryChatterName: "",
     secondaryChatterImage: "",
+    peerId: "",
     tab: null,
   },
   reducers: {
@@ -41,9 +43,11 @@ const CALL_SLICE = createSlice({
       state.secondaryChatter = action.payload._id;
       state.secondaryChatterName = action.payload.username;
       state.secondaryChatterImage = action.payload.image;
+      state.peerId = action.payload.peerId;
     },
-    callAccepted: (state) => {
+    callAccepted: (state, action) => {
       state.callStatus = "accepted";
+      state.peerId = action.payload.peerId;
     },
     startCall: (state) => {
       state.callStatus = "ongoing";

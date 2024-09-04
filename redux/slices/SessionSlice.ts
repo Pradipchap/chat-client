@@ -18,7 +18,7 @@ export const fetchSessionData = createAsyncThunk(
           })
         );
       }
-      console.log(loginResult)
+      //console.log(loginResult)
       return loginResult;
     } catch (error) {
       return null;

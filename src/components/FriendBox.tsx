@@ -67,7 +67,7 @@ function FriendBoxUI({
     async function getChatterDetails() {
       try {
         const apiEndPoint = relation === "FRIEND" ? "getChatter" : "notChatter";
-        console.log(apiEndPoint);
+        //console.log(apiEndPoint);
         const response = await fetch(`${SERVER_BASE_URL}/api/${apiEndPoint}`, {
           method: "POST",
           headers: {
@@ -99,7 +99,7 @@ function FriendBoxUI({
           }
         }
       } catch (error) {
-        console.log(error);
+        //console.log(error);
       }
     }
     getChatterDetails();
@@ -119,7 +119,7 @@ function FriendBoxUI({
   }, [isActive, message]);
 
   useLayoutEffect(() => {
-    console.log(message);
+    //console.log(message);
     function handleMsgWhite() {
       if (isActive) {
         setisMsgRed(false);

@@ -68,7 +68,7 @@ export default function OTP({
             pattern="[0-9]+"
             onKeyDown={handleNumkeyInput}
             onChange={() => {
-              //console.log(e.target.value);
+              ////console.log(e.target.value);
             }}
             maxLength={1}
             className="w-14 h-12 appearance-none flex flex-col items-center justify-center text-center px-2 outline-none border rounded-sm border-blue-900 text-lg bg-white ring-blue-700"

@@ -13,7 +13,8 @@ interface args {
     | "callAcc"
     | "getMess"
     | "msgSeen"
-    | "conClos";
+    | "conClos"
+    | "peersId";
   wsClient: WebSocket | null;
   data?: Blob;
 }

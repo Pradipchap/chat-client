@@ -7,17 +7,18 @@ import sendSocketMessage from "../../functions/sendSocketMessage";
 import { useContext, useEffect, useState } from "react";
 import { WsContext } from "../../utils/WsProvider";
 import setCallSession from "../../functions/setCallSession";
-import getCallSession from "../../functions/getCallSession";
 import deleteCallSession from "../../functions/deleteCallSession";
+import usePeer from "../../customHooks/usePeer";
+import { PeerContext } from "../../utils/PeerProvider";
 
 export default function CallStarterPopup() {
   const wsClient = useContext(WsContext);
+  const Peer = useContext(PeerContext);
   const dispatch = useAppDispatch();
   const callDetails = useAppSelector((state) => state.call);
   const userDetails = useAppSelector((state) => state.currentUser);
   const callStatus = callDetails.callStatus;
   const [isOpen, setIsOpen] = useState(false);
-  const callChannel = new BroadcastChannel("call-channel");
 
   useEffect(() => {
     if (
@@ -26,27 +27,73 @@ export default function CallStarterPopup() {
       callStatus === "ongoing"
     ) {
       setIsOpen(true);
+    } else if (callStatus === "close") {
+      setIsOpen(false);
+      deleteCallSession();
     } else {
       setIsOpen(false);
     }
   }, [callStatus]);
 
-  useEffect(() => {
-    function handleCallEnd(event) {
-      console.log("first");
+  // useEffect(() => {
+  //   function handleCall() {
+  //     if (!Peer) {
+  //       return;
+  //     }
+  //     if (callStatus === "ongoing") {
+  //       const connection = Peer.connect(callDetails.peerId);
+  //       connection?.on("open", () => {
+  //         console.log("Connection established with", callDetails.peerId);
+  //         connection.send("hi");
+  //         if (callDetails.callStatus !== "ongoing") {
+  //           return;
+  //         }
+  //         navigator.mediaDevices
+  //           .getUserMedia({ video: true, audio: true })
+  //           .then((stream) => {
+  //             const call = Peer?.call("another-peers-id", stream);
+  //             call.on("stream", (remoteStream) => {
+  //               // Show stream in some <video> element.
+  //               console.log(remoteStream);
+  //             });
+  //           })
+  //           .catch((err) => {
+  //             console.log(err);
+  //           });
+  //       });
+  //     }
+  //   }
+  //   handleCall();
 
-      if (event.data === "close") {
-        console.log("first");
-        endCallHandler();
+  //   return () => {};
+  // }, [callStatus, Peer]);
+
+  useEffect(() => {
+    function handleStorageChange(event: StorageEvent) {
+      if (event.storageArea === localStorage) {
+        if (event.newValue === null) {
+          sendSocketMessage({
+            sender: userDetails.userID,
+            receiver: callDetails.secondaryChatter,
+            wsClient: wsClient,
+            data: new Blob([]),
+            type: "callEnd",
+          });
+          dispatch(closeCall());
+          //console.log("first");
+          if (callDetails.tab) {
+            callDetails.tab.close();
+          }
+        }
       }
     }
-    callChannel.addEventListener("message", handleCallEnd);
-    return callChannel.removeEventListener("message", handleCallEnd);
-  }, []);
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, [callDetails, userDetails]);
 
   function acceptCallHandler() {
     dispatch(startCall());
-    console.log(wsClient);
+    //console.log(wsClient);
     sendSocketMessage({
       sender: userDetails.userID,
       receiver: callDetails.secondaryChatter,
@@ -56,25 +103,23 @@ export default function CallStarterPopup() {
     });
     setCallSession();
     const newTab = window.open("/call", "_blank");
-    console.log(newTab);
+    //console.log(newTab);
     dispatch(setTab(newTab));
   }
 
   function endCallHandler() {
-    const { userId } = getCallSession();
-    console.log(userId);
     sendSocketMessage({
       sender: userDetails.userID,
-      receiver: userId || "",
+      receiver: callDetails.secondaryChatter || "",
       wsClient: wsClient,
       data: new Blob([]),
       type: "callEnd",
     });
     dispatch(closeCall());
-    deleteCallSession();
-    console.log(callDetails.tab);
-    callDetails.tab?.close();
-    setIsOpen(false);
+    //console.log("first");
+    if (callDetails.tab) {
+      callDetails.tab.close();
+    }
   }
   function rejectCallHandler() {
     dispatch(closeCall());

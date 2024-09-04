@@ -6,6 +6,7 @@ import friendController from "../../functions/friendController";
 import { useAppDispatch, useAppSelector } from "../../utils/reduxHooks";
 import { pullChatters, pushChatters } from "../../redux/slices/UsersSlice";
 import { updateChatterDetails } from "../../redux/slices/ChatSlice";
+import StaticImage from "../assets/avatar.svg";
 
 interface props {
   userID: string;
@@ -35,7 +36,7 @@ export default function UserCard({ username, userID, email, image }: props) {
       dispatch(pullChatters(userID));
       setRequestStatusDelete(SUBMIT_STATUS.SUCCESS);
     } catch (error) {
-      console.log(error);
+      //console.log(error);
       setRequestStatusDelete(SUBMIT_STATUS.FAILED);
     }
   }
@@ -44,7 +45,7 @@ export default function UserCard({ username, userID, email, image }: props) {
       <div className="flex flex-col items-center justify-between">
         <img
           className="w-24 h-24 mb-3 rounded-full shadow-lg"
-          src="/docs/images/people/profile-picture-3.jpg"
+          src={image || StaticImage}
           alt="Bonnie image"
         />
         <p className="mb-1 text-xl font-medium text-gray-900">{username}</p>

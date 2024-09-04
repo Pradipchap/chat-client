@@ -31,7 +31,7 @@ export default function SearchFriends() {
         const data = await response.json();
         setUserList(data.users);
       } catch (error) {
-        //console.log(error);
+        ////console.log(error);
       } finally {
         setIsLoading(false);
       }

@@ -21,7 +21,7 @@ export default function useSound(url: string) {
     return () => {
       current.removeEventListener("ended", () => setIsPlaying(false));
     };
-  }, []);
+  }, [isPlaying]);
 
-  return [play, pause,isPlaying];
+  return [play, pause, isPlaying];
 }

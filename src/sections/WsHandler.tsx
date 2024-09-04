@@ -25,7 +25,6 @@ import {
   startCall,
 } from "../../redux/slices/CallSlice";
 import setCallSession from "../../functions/setCallSession";
-import deleteCallSession from "../../functions/deleteCallSession";
 
 export default function WsHandler() {
   const wsClient = useContext(WsContext);
@@ -33,30 +32,29 @@ export default function WsHandler() {
   const dispatch = useAppDispatch();
   const [play, pause] = useSound(MessageTone);
   const secondaryChatter = getSecondaryChatter();
-  const callChannel = new BroadcastChannel("call-channel");
 
   useEffect(
     () => {
       //eslint-disable-next-line
       async function handleMessage(connection: MessageEvent<any>) {
         const { message, details } = await getSocketData(connection.data);
-        //console.log(secondaryChatter);
-        //console.log(primaryChatter);
-        console.log(details.type);
+        ////console.log(secondaryChatter);
+        ////console.log(primaryChatter);
+        //console.log(details.type);
         switch (details.type) {
           case "newUser": {
-            //console.log("new user");
+            ////console.log("new user");
             dispatch(setWsStatus());
             break;
           }
           case "message":
             {
-              console.log(message);
-              //console.log("dispatching");
-              console.log(details.sender + "p " + secondaryChatter);
+              //console.log(message);
+              ////console.log("dispatching");
+              //console.log(details.sender + "p " + secondaryChatter);
               if (details.sender === secondaryChatter) {
-                //console.log(message);
-                console.log("dispatching");
+                ////console.log(message);
+                //console.log("dispatching");
                 dispatch(pushMessage([{ message: message, isReceiver: true }]));
               } else {
                 if (typeof play !== "boolean") {
@@ -66,7 +64,7 @@ export default function WsHandler() {
                   pause();
                 }
               }
-              console.log(details.sender);
+              //console.log(details.sender);
               dispatch(
                 pushChatters({
                   chatterID: details.sender,
@@ -74,7 +72,7 @@ export default function WsHandler() {
                   relation: "FRIEND",
                 })
               );
-              console.log("ooo");
+              //console.log("ooo");
               dispatch(
                 updateLatestMessage({
                   message,
@@ -86,9 +84,9 @@ export default function WsHandler() {
             break;
           case "getMess":
             {
-              console.log(message);
+              //console.log(message);
               const chat: ChatsDataInterface = JSON.parse(message);
-              console.log(chat);
+              //console.log(chat);
 
               const finalChats = chat.messages.map((item) => {
                 const isReceiver = item.sender !== currentUser.userID;
@@ -100,7 +98,7 @@ export default function WsHandler() {
                 };
               });
               const reversedChats = finalChats.reverse();
-              console.log(reversedChats);
+              //console.log(reversedChats);
               if (chat.page === 1) dispatch(updateChats(reversedChats));
               else dispatch(pushChat(reversedChats));
             }
@@ -112,22 +110,22 @@ export default function WsHandler() {
             break;
           case "callInc":
             {
-              console.log("first");
-              console.log(message);
+              //console.log("first");
+              console.log(JSON.parse(message));
               dispatch(incomingCall(JSON.parse(message)));
             }
             break;
           case "callTmo":
             {
-              console.log("first");
-              console.log(message);
+              //console.log("first");
+              //console.log(message);
               dispatch(incomingCall(JSON.parse(message)));
             }
             break;
           case "callRej":
             {
-              console.log("first");
-              console.log(message);
+              //console.log("first");
+              //console.log(message);
               dispatch(rejectCall());
               setTimeout(() => {
                 dispatch(closeCall());
@@ -136,19 +134,17 @@ export default function WsHandler() {
             break;
           case "callEnd":
             {
-              console.log("first");
-              console.log(message);
-              deleteCallSession();
-              callChannel.postMessage("close");
+              // deleteCallSession();
               dispatch(closeCall());
             }
             break;
           case "callAcc":
             {
-              console.log("first");
+              //console.log("first");
               setCallSession();
               dispatch(startCall());
               const newTab = window.open("/call", "_blank");
+              //console.log(newTab);
               dispatch(setTab(newTab));
             }
             break;

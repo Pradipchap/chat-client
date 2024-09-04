@@ -4,6 +4,7 @@ import { requestCall } from "../../redux/slices/CallSlice";
 import { useAppDispatch, useAppSelector } from "../../utils/reduxHooks";
 import { WsContext } from "../../utils/WsProvider";
 import Icon from "./Icon";
+import { SERVER_BASE_URL } from "../../utils/constants";
 
 export default function ChatBoxTopBar() {
   const dispatch = useAppDispatch();
@@ -12,23 +13,34 @@ export default function ChatBoxTopBar() {
   const chatter = useAppSelector((state) => state.chat);
   const callDetails = useAppSelector((state) => state.call);
 
-  function handleCallOpen() {
-    if (callDetails.callStatus === "close") {
-      dispatch(
-        requestCall({
-          secondaryChatter: chatter.secondaryChatter,
-          secondaryChatterName: chatter.secondaryChatterName,
-          secondaryChatterImage: chatter.secondaryChatterImage,
-        })
-      );
-      const blob = new Blob([]);
-      sendSocketMessage({
-        sender: userId,
-        receiver: chatter.secondaryChatter,
-        wsClient,
-        data: blob,
-        type: "callReq",
-      });
+  async function handleCallOpen() {
+    try {
+      if (callDetails.callStatus === "close") {
+        // const response = await fetch(`${SERVER_BASE_URL}/getPeerId`);
+        // if (!response.ok) {
+        //   throw "";
+        // }
+        // const result = await response.json();
+
+        dispatch(
+          requestCall({
+            secondaryChatter: chatter.secondaryChatter,
+            secondaryChatterName: chatter.secondaryChatterName,
+            secondaryChatterImage: chatter.secondaryChatterImage,
+            // peerId: result.peerId,
+          })
+        );
+        const blob = new Blob([]);
+        sendSocketMessage({
+          sender: userId,
+          receiver: chatter.secondaryChatter,
+          wsClient,
+          data: blob,
+          type: "callReq",
+        });
+      }
+    } catch (error) {
+      console.log(error);
     }
   }
   return (

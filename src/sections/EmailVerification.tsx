@@ -8,7 +8,7 @@ import { SERVER_BASE_URL } from "../../utils/constants";
 
 export default function EmailVerification({ email }: { email: string }) {
   const { showError, showLoading, showSuccess } = useToast();
-  console.log("first");
+  //console.log("first");
   const navigate = useNavigate();
 
   async function EmailVerificationHandler(event: FormEvent<HTMLFormElement>) {
@@ -23,7 +23,7 @@ export default function EmailVerification({ email }: { email: string }) {
         otp += otps[key];
       }
     }
-    //console.log(Number(otp));
+    ////console.log(Number(otp));
     showLoading("loading");
     const requestData = { email, code: Number(otp) };
 

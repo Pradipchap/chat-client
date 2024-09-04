@@ -25,7 +25,7 @@ export default function Signup() {
   async function signUpHandler(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setLoginStatus(SUBMIT_STATUS.LOADING);
-    //console.log("first");
+    ////console.log("first");
     const { username, email, password, confirmPassword } = getFormElementValues(
       event
     ) as {
@@ -35,7 +35,7 @@ export default function Signup() {
       confirmPassword: string;
     };
     try {
-      //console.log(password, confirmPassword);
+      ////console.log(password, confirmPassword);
       if (password !== confirmPassword) {
         throw { error: { message: "password must be same" } };
       }

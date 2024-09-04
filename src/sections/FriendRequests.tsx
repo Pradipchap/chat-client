@@ -25,7 +25,7 @@ export default function FriendRequests() {
 
   return (
     <div className="p-2 mt-10">
-      <div className="flex gap-5 w-full">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 w-full">
         {friendRequests.length > 0 &&
           friendRequests[0] !== null &&
           friendRequests.map((item) => {
@@ -35,6 +35,7 @@ export default function FriendRequests() {
                 username={item.username}
                 email={item.email}
                 userID={item._id}
+                image={item.image}
               />
             );
           })}
@@ -55,7 +56,7 @@ export default function FriendRequests() {
   );
 }
 
-function SendRequestCard({ userID, username, email }: props) {
+function SendRequestCard({ userID, username, email, image }: props) {
   const currentUser = useAppSelector((state) => state.currentUser);
   const dispatch = useAppDispatch();
   const [requestStatus, setrequestStatus] = useState<SUBMIT_STATUS>(
@@ -79,7 +80,7 @@ function SendRequestCard({ userID, username, email }: props) {
       if (response.ok) {
         setrequestStatus(SUBMIT_STATUS.SUCCESS);
         const convo = await response.json();
-        console.log(convo);
+        //console.log(convo);
         dispatch(
           pushChatters({
             username: username,
@@ -90,11 +91,11 @@ function SendRequestCard({ userID, username, email }: props) {
           })
         );
       } else {
-        console.log("first");
+        //console.log("first");
         throw "";
       }
     } catch (error) {
-      console.log(error);
+      //console.log(error);
       setrequestStatus(SUBMIT_STATUS.FAILED);
       setTimeout(() => {
         setrequestStatus(SUBMIT_STATUS.IDLE);
@@ -114,7 +115,7 @@ function SendRequestCard({ userID, username, email }: props) {
         },
         body: JSON.stringify(requestData),
       });
-      //console.log("response", response);
+      ////console.log("response", response);
       if (response.ok) {
         setrequestStatusDelete(SUBMIT_STATUS.SUCCESS);
       } else {
@@ -132,7 +133,7 @@ function SendRequestCard({ userID, username, email }: props) {
       <div className="flex flex-col items-center justify-between">
         <img
           className="w-24 h-24 mb-3 rounded-full shadow-lg"
-          src="/docs/images/people/profile-picture-3.jpg"
+          src={image}
           alt="Bonnie image"
         />
         <h5 className="mb-1 text-xl font-medium text-gray-900">{username}</h5>

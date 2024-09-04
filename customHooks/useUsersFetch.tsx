@@ -41,7 +41,7 @@ export default function useUsersFetch({ currentPath }: props) {
           setResult(data);
         }
       } catch (error) {
-        //console.log(error);
+        ////console.log(error);
       } finally {
         setLoading(false);
       }

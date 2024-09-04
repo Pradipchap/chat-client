@@ -2,13 +2,11 @@ import Button from "./Button";
 import deleteCallSession from "../../functions/deleteCallSession";
 
 export default function CallController() {
-  const callChannel = new BroadcastChannel("call-channel");
   function handleMute() {}
 
   function endCall() {
     deleteCallSession();
-    callChannel.postMessage("close");
-    window.close();
+    window.close()
   }
 
   return (

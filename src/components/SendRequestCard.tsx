@@ -2,6 +2,7 @@ import { lazy, useState } from "react";
 import { useAppSelector } from "../../utils/reduxHooks";
 import { SERVER_BASE_URL, SUBMIT_STATUS } from "../../utils/constants";
 const StatusButton = lazy(() => import("./StatusButton"));
+import StaticImage from "../assets/avatar.svg";
 
 interface props {
   userID?: string;
@@ -10,14 +11,19 @@ interface props {
   image?: string;
 }
 
-export default function SendRequestCard({ userID, username, email }: props) {
+export default function SendRequestCard({
+  userID,
+  username,
+  email,
+  image,
+}: props) {
   const currentUser = useAppSelector((state) => state.currentUser);
   const [requestStatus, setrequestStatus] = useState<SUBMIT_STATUS>(
     SUBMIT_STATUS.IDLE
   );
   async function sendRequest() {
     try {
-      //console.log("");
+      ////console.log("");
       const requestData = { requestID: userID };
       setrequestStatus(SUBMIT_STATUS.LOADING);
       const response = await fetch(SERVER_BASE_URL + "/api/sendFriendRequest", {
@@ -28,7 +34,7 @@ export default function SendRequestCard({ userID, username, email }: props) {
         },
         body: JSON.stringify(requestData),
       });
-      //console.log("response", response);
+      ////console.log("response", response);
       if (response.ok) {
         setrequestStatus(SUBMIT_STATUS.SUCCESS);
       } else {
@@ -42,11 +48,11 @@ export default function SendRequestCard({ userID, username, email }: props) {
     }
   }
   return (
-    <div className="w-full max-w-[250px] p-3 bg-white border border-gray-200 rounded-lg shadow">
+    <div className="w-full max-w-[290px] p-3 bg-white border border-gray-200 rounded-lg shadow">
       <div className="flex flex-col items-center justify-between">
         <img
           className="w-24 h-24 mb-3 rounded-full shadow-lg"
-          src="/docs/images/people/profile-picture-3.jpg"
+          src={image || StaticImage}
           alt="Bonnie image"
         />
         <h5 className="mb-1 text-xl font-medium text-gray-900">{username}</h5>

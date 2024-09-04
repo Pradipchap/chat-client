@@ -46,12 +46,12 @@ export default function Search() {
         });
 
         const users = await response.json();
-        console.log(users);
+        //console.log(users);
         startTransition(() => {
           dispatch(updateChatters(users.users));
         });
       } catch (error) {
-        console.error("Error fetching users:", error);
+        //console.error("Error fetching users:", error);
       }
     }
 

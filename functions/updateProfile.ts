@@ -15,6 +15,6 @@ export default function updateProfile(
     image: data.image,
     email: data.email,
   };
-  console.log(updatedData)
+  //console.log(updatedData)
   setCookie("chatAppDetails", updatedData, expiresIn);
 }

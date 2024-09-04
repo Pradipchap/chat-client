@@ -28,7 +28,7 @@ export default function useDragHandler(
   }, []);
 
   function dragElement(e: MouseEvent) {
-    console.log(isDraggable);
+    //console.log(isDraggable);
     if (!target || !isDraggable) return;
     e.preventDefault();
     // calculate the new cursor position:

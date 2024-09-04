@@ -1,9 +1,10 @@
 const channelInstances: { [key: string]: BroadcastChannel } = {};
 
-export default function getSingleBroadcastChannel(name: string) {
-  if (channelInstances[name]) {
-    return channelInstances[name];
-  } else {
+const getSingletonChannel = (name: string): BroadcastChannel => {
+  if (!channelInstances[name]) {
     channelInstances[name] = new BroadcastChannel(name);
   }
-}
+  return channelInstances[name];
+};
+
+export default getSingletonChannel;

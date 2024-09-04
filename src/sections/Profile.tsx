@@ -142,7 +142,7 @@ function EditProfilePopup() {
     try {
       const formData = new FormData(e.currentTarget);
       formData.append("userID", session.userID);
-      console.log();
+      //console.log();
       const response = await fetch(`${SERVER_BASE_URL}/api/editProfile`, {
         method: "POST",
         headers: {
