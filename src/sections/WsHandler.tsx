@@ -16,7 +16,6 @@ import {
   updateLatestMessage,
 } from "../../redux/slices/UsersSlice";
 import { ChatsDataInterface } from "../../interfaces/dataInterfaces";
-import getSecondaryChatter from "../../customHooks/useGetChatter";
 import {
   closeCall,
   incomingCall,
@@ -25,18 +24,20 @@ import {
   startCall,
 } from "../../redux/slices/CallSlice";
 import setCallSession from "../../functions/setCallSession";
+import { store } from "../../redux/store";
 
 export default function WsHandler() {
   const wsClient = useContext(WsContext);
   const currentUser = useAppSelector((state) => state.currentUser);
   const dispatch = useAppDispatch();
   const [play, pause] = useSound(MessageTone);
-  const secondaryChatter = getSecondaryChatter();
 
   useEffect(
     () => {
       //eslint-disable-next-line
       async function handleMessage(connection: MessageEvent<any>) {
+        const secondaryChatterFromStore =
+          store.getState().chat.secondaryChatter;
         const { message, details } = await getSocketData(connection.data);
         ////console.log(secondaryChatter);
         ////console.log(primaryChatter);
@@ -49,12 +50,7 @@ export default function WsHandler() {
           }
           case "message":
             {
-              //console.log(message);
-              ////console.log("dispatching");
-              //console.log(details.sender + "p " + secondaryChatter);
-              if (details.sender === secondaryChatter) {
-                ////console.log(message);
-                //console.log("dispatching");
+              if (details?.sender === secondaryChatterFromStore) {
                 dispatch(pushMessage([{ message: message, isReceiver: true }]));
               } else {
                 if (typeof play !== "boolean") {
@@ -64,7 +60,6 @@ export default function WsHandler() {
                   pause();
                 }
               }
-              //console.log(details.sender);
               dispatch(
                 pushChatters({
                   chatterID: details.sender,
@@ -72,7 +67,6 @@ export default function WsHandler() {
                   relation: "FRIEND",
                 })
               );
-              //console.log("ooo");
               dispatch(
                 updateLatestMessage({
                   message,

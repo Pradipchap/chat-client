@@ -1,0 +1,1 @@
+export const CHATTERS_QUERY_KEY="chatters"

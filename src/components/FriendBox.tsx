@@ -67,7 +67,6 @@ function FriendBoxUI({
     async function getChatterDetails() {
       try {
         const apiEndPoint = relation === "FRIEND" ? "getChatter" : "notChatter";
-        //console.log(apiEndPoint);
         const response = await fetch(`${SERVER_BASE_URL}/api/${apiEndPoint}`, {
           method: "POST",
           headers: {
@@ -146,7 +145,7 @@ function FriendBoxUI({
   }
 
   function updateChatter() {
-    navigate(`/chat/${chatterID}`);
+    console.log("updating",chatterID)
     dispatch(
       updateChatterDetails({
         primaryChatter: primaryChatter,
@@ -156,6 +155,7 @@ function FriendBoxUI({
         image: details?.participantDetails.image,
       })
     );
+    navigate(`/chat/${chatterID}`);
   }
   return (
     <button

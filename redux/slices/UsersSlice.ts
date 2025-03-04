@@ -38,7 +38,7 @@ export const fetchChatters = createAsyncThunk(
   async ({ accessToken }: { accessToken: string }, { dispatch }) => {
     try {
       const response = await fetch(`${SERVER_BASE_URL}/api/chatters`, {
-        method: "POST",
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer" + " " + accessToken,
@@ -105,7 +105,13 @@ const USER_SLICE = createSlice({
     },
     pushChatters: (state, action) => {
       if (action.payload instanceof Array) {
-        state.chatters = [...action.payload, ...state.chatters];
+        // Filter out duplicates based on chatterID
+        const newChatters = action.payload.filter(newChatter => 
+          !state.chatters.some(existingChatter => 
+            existingChatter.chatterID === newChatter.chatterID
+          )
+        );
+        state.chatters = [...newChatters, ...state.chatters];
       } else {
         const isPresent = state.chatters.some((item) => {
           return item.chatterID === action.payload.chatterID;

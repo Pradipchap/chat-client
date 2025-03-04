@@ -8,16 +8,19 @@ import ReduxProvider from "../redux/ReduxProvider.tsx";
 import { Analytics } from "@vercel/analytics/react";
 import WsProvider from "../utils/WsProvider.tsx";
 import PeerProvider from "../utils/PeerProvider.tsx";
+import { QueryProvider } from "./providers/QueryProvider.tsx";
 
 store.dispatch(fetchSessionData());
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ReduxProvider>
       <WsProvider>
-        <PeerProvider>
-          <Analytics />
-          <App />
-        </PeerProvider>
+        <QueryProvider>
+          <PeerProvider>
+            <Analytics />
+            <App />
+          </PeerProvider>
+        </QueryProvider>
       </WsProvider>
     </ReduxProvider>
   </React.StrictMode>

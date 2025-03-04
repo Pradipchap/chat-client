@@ -13,15 +13,12 @@ import updateProfile from "../../functions/updateProfile";
 import { fetchSessionData } from "../../redux/slices/SessionSlice";
 
 export default function Profile() {
-  const session = useAppSelector((state) => state.currentUser);
+  const session = useAppSelector(state => state.currentUser);
   return (
     <div className="relative px-5 mx-auto w-full flex flex-col items-center justify-center mt-14 gap-10">
       <PopupOver content={<EditProfilePopup />} targetIndependent>
         <button className="absolute right-2 top-0">
-          <Icon
-            className="bg-gray-100 px-2 py-2 text-black text-lg rounded-lg"
-            name="UserEdit"
-          />
+          <Icon className="bg-gray-100 px-2 py-2 text-black text-lg rounded-lg" name="UserEdit" />
         </button>
       </PopupOver>
       <ProfilePic image={session?.image || null} className="h-32 w-32" />
@@ -114,12 +111,7 @@ export default function Profile() {
             />
           </div>
           <div className="flex flex-col gap-1 w-full ">
-            <Button
-              onClick={logoutHandler}
-              className="bg-red-700 text-base px-5 gap-2"
-              icon="Logout"
-              iconClassName="text-white"
-            >
+            <Button onClick={logoutHandler} className="bg-red-700 text-base px-5 gap-2" icon="Logout" iconClassName="text-white">
               logout
             </Button>
           </div>
@@ -129,12 +121,11 @@ export default function Profile() {
   );
 }
 function EditProfilePopup() {
-  const session = useAppSelector((state) => state.currentUser);
+  const session = useAppSelector(state => state.currentUser);
+
   const dispatch = useAppDispatch();
   const { showError } = useToast();
-  const [profileEditStatus, setProfileEditStatus] = useState<SUBMIT_STATUS>(
-    SUBMIT_STATUS.IDLE
-  );
+  const [profileEditStatus, setProfileEditStatus] = useState<SUBMIT_STATUS>(SUBMIT_STATUS.IDLE);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -142,23 +133,18 @@ function EditProfilePopup() {
     try {
       const formData = new FormData(e.currentTarget);
       formData.append("userID", session.userID);
-      //console.log();
       const response = await fetch(`${SERVER_BASE_URL}/api/editProfile`, {
         method: "POST",
         headers: {
-          Authorization: "Bearer" + " " + session.accessToken,
+          Authorization: "Bearer" + " " + session.accessToken
         },
-        body: formData,
+        body: formData
       });
       if (!response.ok) {
         throw new Error("profile edit not successfull");
       }
       const result = await response.json();
-      updateProfile(
-        await result.updatedProfile,
-        session.expiresIn,
-        session.accessToken
-      );
+      updateProfile(await result.updatedProfile, session.expiresIn, session.accessToken);
       dispatch(fetchSessionData());
       setProfileEditStatus(SUBMIT_STATUS.SUCCESS);
     } catch (error) {
@@ -171,16 +157,9 @@ function EditProfilePopup() {
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="bg-white p-5 w-[450px] items-center justify-center flex flex-col gap-5"
-    >
+    <form onSubmit={handleSubmit} className="bg-white p-5 w-[450px] items-center justify-center flex flex-col gap-5">
       <p className="h-10 text-xl">Edit Profile</p>
-      <ImageUpload
-        defaultImage={session?.image || undefined}
-        shape="circle"
-        className="h-32 w-32"
-      />
+      <ImageUpload defaultImage={session?.image || undefined} shape="circle" className="h-32 w-32" />
       <div className="flex flex-col gap-1 w-full">
         <label htmlFor="name" className=" text-sm text-gray-500">
           Display Name

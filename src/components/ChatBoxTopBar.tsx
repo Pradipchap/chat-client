@@ -15,18 +15,11 @@ export default function ChatBoxTopBar() {
   async function handleCallOpen() {
     try {
       if (callDetails.callStatus === "close") {
-        // const response = await fetch(`${SERVER_BASE_URL}/getPeerId`);
-        // if (!response.ok) {
-        //   throw "";
-        // }
-        // const result = await response.json();
-
         dispatch(
           requestCall({
             secondaryChatter: chatter.secondaryChatter,
             secondaryChatterName: chatter.secondaryChatterName,
             secondaryChatterImage: chatter.secondaryChatterImage,
-            // peerId: result.peerId,
           })
         );
         const blob = new Blob([]);
@@ -44,7 +37,7 @@ export default function ChatBoxTopBar() {
   }
   return (
     <div className="bg-gray-200 border-b border-gray-400 font-bold text-black h-14 w-full absolute top-0 flex justify-between items-center px-2">
-      <p>{chatter.secondaryChatterName}</p>
+      <p>{chatter?.secondaryChatterName}</p>
       <button
         onClick={handleCallOpen}
         title="Call"

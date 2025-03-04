@@ -1,62 +1,25 @@
-import {
-  ChatterDetailsInterface,
-  ChatterInterface,
-} from "../../interfaces/dataInterfaces";
-import { useAppDispatch, useAppSelector } from "../../utils/reduxHooks";
+import { ChatterInterface } from "../../interfaces/dataInterfaces";
 import FriendBoxSkeleton from "./Skeleton/FriendBoxSkeleton.tsx";
 import useInfiniteScrolling from "../../customHooks/useInfiniteScrolling";
-import { lazy, startTransition, useEffect, useRef, useState } from "react";
+import { useGetChatters } from "../../customHooks/queryHooks/useGetChatters.ts";
+
+import { lazy, useRef } from "react";
+import { useAppSelector } from "../../utils/reduxHooks.ts";
 const FriendBox = lazy(() => import("./FriendBox.tsx"));
 const Icon = lazy(() => import("./Icon.tsx"));
-import { SERVER_BASE_URL } from "../../utils/constants";
-import { pushChatters } from "../../redux/slices/UsersSlice";
 
 export default function FriendList() {
-  const chatters = useAppSelector((state) => state.users.chatters);
-  const accessToken = useAppSelector((state) => state.currentUser.accessToken);
-  const loading = useAppSelector((state) => state.users.loading);
-  const error = useAppSelector((state) => state.users.error);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [page, setPage] = useState(1);
   const spinnerRef = useRef<HTMLDivElement | null>(null);
-  const dispatch = useAppDispatch();
-
-  useInfiniteScrolling(spinnerRef, isLoading, () => {
-    setPage((page) => page + 1);
+  const chatters = useAppSelector(state => state.users.chatters);
+  const { isPending, setPage, error } = useGetChatters();
+  useInfiniteScrolling(spinnerRef, isPending, () => {
+    setPage(page => page + 1);
   });
 
-  useEffect(() => {
-    async function handleScroll() {
-      if (page <= 1) {
-        return;
-      }
-      try {
-        setIsLoading(true);
-        const response = await fetch(`${SERVER_BASE_URL}/api/chatters`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer" + " " + accessToken,
-          },
-          body: JSON.stringify({ page: page }),
-        });
-        const results: {
-          users: ChatterDetailsInterface[];
-        } = await response.json();
-        startTransition(() => {
-          dispatch(pushChatters(results.users));
-        });
-      } finally {
-        setIsLoading(false);
-      }
-    }
-    handleScroll();
-  }, [page]);
-
   if (error) {
-    return <p>something wrong happened</p>;
+    return <p>something wrong happened {error.message}</p>;
   }
-  if (loading) {
+  if (isPending) {
     return (
       <>
         <FriendBoxSkeleton />
@@ -68,19 +31,15 @@ export default function FriendList() {
   } else
     return (
       <div>
-        {chatters.length === 0 ? (
+        {chatters?.length === 0 ? (
           <p className="w-full text-center">No users</p>
         ) : (
-          chatters.map((element: ChatterInterface) => {
+          chatters?.map((element: ChatterInterface) => {
             return <FriendBox key={element._id} {...element} />;
           })
         )}
-        {chatters.length >= 12 && (
-          <div
-            ref={spinnerRef}
-            onClick={() => setPage((page) => page + 1)}
-            className="self-center w-max"
-          >
+        {chatters?.length >= 12 && (
+          <div ref={spinnerRef} onClick={() => setPage(page => page + 1)} className="self-center w-max">
             <Icon name="Loading" />
           </div>
         )}
